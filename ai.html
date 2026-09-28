@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gyami | AI Assistant</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:
+        radial-gradient(circle at top left,#172554 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#312e81 0%,transparent 35%),
+        #080d1c;
+    color:white;
+    min-height:100vh;
+}
+
+nav{
+    padding:18px 7%;
+    background:#0f172a;
+    border-bottom:1px solid #26304a;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    color:#7dd3fc;
+}
+
+.nav-links{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+.nav-links a:hover,
+.nav-links .active{
+    color:#7dd3fc;
+}
+
+.container{
+    width:86%;
+    max-width:1100px;
+    margin:40px auto;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.robot{
+    font-size:60px;
+    margin-bottom:10px;
+}
+
+.header h1{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.header p{
+    color:#94a3b8;
+}
+
+.ai-card,
+.planner-card,
+.feature{
+    background:rgba(17,24,39,0.92);
+    border:1px solid #293653;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.chat-header{
+    padding:20px 25px;
+    background:#172033;
+    border-bottom:1px solid #293653;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.ai-status{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#22c55e;
+}
+
+.chat-header h3{
+    margin-bottom:4px;
+}
+
+.chat-header p{
+    color:#94a3b8;
+    font-size:13px;
+}
+
+.chat{
+    height:400px;
+    overflow-y:auto;
+    padding:25px;
+}
+
+.message{
+    max-width:75%;
+    padding:14px 17px;
+    border-radius:15px;
+    margin-bottom:18px;
+    line-height:1.6;
+    white-space:normal;
+}
+
+.ai-message{
+    background:#172554;
+    border:1px solid #334155;
+}
+
+.user-message{
+    background:#312e81;
+    margin-left:auto;
+}
+
+.input-area{
+    padding:20px;
+    border-top:1px solid #293653;
+    display:flex;
+    gap:12px;
+}
+
+.input-area input{
+    flex:1;
+    padding:15px;
+    background:#0f172a;
+    color:white;
+    border:1px solid #334155;
+    border-radius:11px;
+    outline:none;
+    font-size:14px;
+}
+
+.input-area input:focus{
+    border-color:#38bdf8;
+}
+
+.ask-btn,
+.plan-btn{
+    padding:14px 22px;
+    border:none;
+    border-radius:11px;
+    background:linear-gradient(90deg,#2563eb,#6366f1);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.ask-btn:hover,
+.plan-btn:hover{
+    opacity:0.9;
+}
+
+.ask-btn:disabled,
+.plan-btn:disabled{
+    opacity:0.6;
+    cursor:not-allowed;
+}
+
+/* STUDY PLANNER */
+
+.planner{
+    margin-top:35px;
+}
+
+.planner-card{
+    padding:28px;
+}
+
+.planner-title{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:10px;
+}
+
+.planner-title span{
+    font-size:35px;
+}
+
+.planner-card > p{
+    color:#94a3b8;
+    margin-bottom:25px;
+    line-height:1.6;
+}
+
+.planner-form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.form-group.full{
+    grid-column:1 / -1;
+}
+
+.form-group label{
+    color:#cbd5e1;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.form-group input,
+.form-group select{
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #334155;
+    background:#0f172a;
+    color:white;
+    outline:none;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:#38bdf8;
+}
+
+.plan-btn{
+    margin-top:20px;
+    width:100%;
+    font-size:15px;
+}
+
+.plan-result{
+    display:none;
+    margin-top:25px;
+    padding:22px;
+    background:#0f172a;
+    border:1px solid #334155;
+    border-radius:15px;
+}
+
+.plan-result h3{
+    margin-bottom:15px;
+    color:#7dd3fc;
+}
+
+.plan-content{
+    color:#cbd5e1;
+    line-height:1.8;
+}
+
+.day-plan{
+    margin-top:14px;
+    padding:15px;
+    background:#111827;
+    border:1px solid #293653;
+    border-radius:12px;
+}
+
+.day-plan strong{
+    color:#7dd3fc;
+}
+
+.quick{
+    margin-top:30px;
+}
+
+.quick h2{
+    margin-bottom:17px;
+}
+
+.questions{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.question{
+    padding:15px;
+    background:#111827;
+    border:1px solid #293653;
+    border-radius:12px;
+    color:#cbd5e1;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.question:hover{
+    border-color:#38bdf8;
+    transform:translateY(-2px);
+}
+
+.features{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.feature{
+    padding:23px;
+}
+
+.feature-icon{
+    font-size:32px;
+    margin-bottom:12px;
+}
+
+.feature h3{
+    margin-bottom:8px;
+}
+
+.feature p{
+    color:#94a3b8;
+    line-height:1.6;
+    font-size:14px;
+}
+
+@media(max-width:850px){
+
+    .questions{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .planner-form{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+}
+
+@media(max-width:600px){
+
+    nav{
+        flex-direction:column;
+    }
+
+    .nav-links{
+        justify-content:center;
+        gap:10px;
+    }
+
+    .header h1{
+        font-size:30px;
+    }
+
+    .questions{
+        grid-template-columns:1fr;
+    }
+
+    .input-area{
+        flex-direction:column;
+    }
+
+    .ask-btn{
+        padding:14px;
+    }
+
+    .message{
+        max-width:90%;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+🌐 Gyami
+</div>
+
+<div class="nav-links">
+
+<a href="dashboard.html">Dashboard</a>
+<a href="courses.html">Courses</a>
+<a href="books.html">Books</a>
+<a href="ai.html" class="active">AI Assistant</a>
+<a href="quiz.html">Quiz</a>
+<a href="progress.html">Progress</a>
+<a href="about.html">About</a>
+
+</div>
+
+</nav>
+
+
+<main class="container">
+
+
+<section class="header">
+
+<div class="robot">
+🤖
+</div>
+
+<h1>
+Gyami AI Assistant
+</h1>
+
+<p>
+Your smart study companion for learning, revision and exams.
+</p>
+
+</section>
+
+
+<!-- AI CHAT -->
+
+<section class="ai-card">
+
+<div class="chat-header">
+
+<div class="ai-status"></div>
+
+<div>
+
+<h3>
+Gyami AI
+</h3>
+
+<p>
+Online • Ready to help you learn
+</p>
+
+</div>
+
+</div>
+
+
+<div class="chat" id="chat">
+
+<div class="message ai-message">
+
+🤖 <strong>Hello! I'm Gyami AI.</strong>
+
+<br><br>
+
+I can help you with:
+
+<br><br>
+
+🧠 Concept explanations<br>
+🐍 Python<br>
+📐 Mathematics<br>
+⚛️ Physics<br>
+🧪 Chemistry<br>
+🤖 Artificial Intelligence<br>
+🌐 Web Development<br>
+📅 Study plans<br>
+🎯 Exam preparation
+
+<br><br>
+
+Ask me something below! 🚀
+
+</div>
+
+</div>
+
+
+<div class="input-area">
+
+<input
+type="text"
+id="userInput"
+placeholder="Ask me about your studies..."
+autocomplete="off"
+>
+
+<button
+class="ask-btn"
+id="askButton"
+onclick="askAI()"
+>
+
+Ask AI 🤖
+
+</button>
+
+</div>
+
+</section>
+
+
+<!-- AI STUDY PLANNER -->
+
+<section class="planner">
+
+<div class="planner-card">
+
+<div class="planner-title">
+
+<span>🧠</span>
+
+<h2>
+AI Study Planner
+</h2>
+
+</div>
+
+<p>
+Tell Gyami what you need to study and it will create a simple personalized study plan for you.
+</p>
+
+
+<div class="planner-form">
+
+<div class="form-group">
+
+<label for="planSubject">
+Subject
+</label>
+
+<select id="planSubject">
+
+<option value="Python Programming">
+Python Programming
+</option>
+
+<option value="Mathematics">
+Mathematics
+</option>
+
+<option value="Physics">
+Physics
+</option>
+
+<option value="Chemistry">
+Chemistry
+</option>
+
+<option value="Artificial Intelligence">
+Artificial Intelligence
+</option>
+
+<option value="Web Development">
+Web Development
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="planDays">
+Days available
+</label>
+
+<input
+type="number"
+id="planDays"
+min="1"
+max="30"
+value="5"
+placeholder="Example: 5"
+>
+
+</div>
+
+
+<div class="form-group full">
+
+<label for="planTopic">
+What do you need to study?
+</label>
+
+<input
+type="text"
+id="planTopic"
+placeholder="Example: Physics chapters for my exam"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="planTime">
+Study time per day
+</label>
+
+<select id="planTime">
+
+<option value="30 minutes">
+30 minutes
+</option>
+
+<option value="1 hour" selected>
+1 hour
+</option>
+
+<option value="2 hours">
+2 hours
+</option>
+
+<option value="3 hours">
+3 hours
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="planGoal">
+Main goal
+</label>
+
+<select id="planGoal">
+
+<option value="Understand the concepts">
+Understand the concepts
+</option>
+
+<option value="Prepare for an exam">
+Prepare for an exam
+</option>
+
+<option value="Revise">
+Revise
+</option>
+
+<option value="Complete the syllabus">
+Complete the syllabus
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<button
+class="plan-btn"
+id="planButton"
+onclick="createStudyPlan()"
+>
+
+✨ Create My Study Plan
+
+</button>
+
+
+<div
+class="plan-result"
+id="planResult"
+>
+
+<h3>
+📅 Your Gyami Study Plan
+</h3>
+
+<div
+class="plan-content"
+id="planContent"
+></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- QUICK QUESTIONS -->
+
+<section class="quick">
+
+<h2>
+⚡ Quick Questions
+</h2>
+
+<div class="questions">
+
+<div
+class="question"
+onclick="quickAsk('Explain Newtons Second Law')"
+>
+⚛️ Explain Newton's Second Law
+</div>
+
+<div
+class="question"
+onclick="quickAsk('Teach me Python basics')"
+>
+🐍 Teach me Python basics
+</div>
+
+<div
+class="question"
+onclick="quickAsk('What are Python data types?')"
+>
+📚 Python data types
+</div>
+
+<div
+class="question"
+onclick="quickAsk('Create a study plan')"
+>
+📅 Create a study plan
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features">
+
+<div class="feature">
+
+<div class="feature-icon">
+🧠
+</div>
+
+<h3>
+Concept Explanation
+</h3>
+
+<p>
+Understand difficult topics using simple student-friendly explanations.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<div class="feature-icon">
+🎯
+</div>
+
+<h3>
+Personalized Learning
+</h3>
+
+<p>
+Get useful study suggestions based on your learning activity.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<div class="feature-icon">
+📊
+</div>
+
+<h3>
+Smart Progress
+</h3>
+
+<p>
+Use your courses and quiz activity to decide what to study next.
+</p>
+
+</div>
+
+</section>
+
+
+</main>
+
+
+<script>
+
+
+/* ============================================================
+   ADD MESSAGE
+============================================================ */
+
+function addMessage(text,type){
+
+    const chat =
+        document.getElementById("chat");
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message " + type;
+
+    message.innerHTML =
+        text;
+
+    chat.appendChild(message);
+
+    chat.scrollTop =
+        chat.scrollHeight;
+}
+
+
+/* ============================================================
+   ASK AI
+============================================================ */
+
+async function askAI(){
+
+    const input =
+        document.getElementById("userInput");
+
+    const button =
+        document.getElementById("askButton");
+
+    const question =
+        input.value.trim();
+
+    if(question === ""){
+        return;
+    }
+
+    addMessage(
+        escapeHtml(question),
+        "user-message"
+    );
+
+    input.value = "";
+
+    button.disabled = true;
+
+    button.textContent =
+        "Thinking... 🤔";
+
+    const loadingId =
+        "loading-" + Date.now();
+
+    const loading =
+        document.createElement("div");
+
+    loading.className =
+        "message ai-message";
+
+    loading.id =
+        loadingId;
+
+    loading.innerHTML =
+        "🤖 <strong>Gyami AI is thinking...</strong>";
+
+    document
+        .getElementById("chat")
+        .appendChild(loading);
+
+    try{
+
+        const storedUser =
+            localStorage.getItem("gyamiUser");
+
+        let userId = 0;
+
+        if(storedUser){
+
+            try{
+
+                const user =
+                    JSON.parse(storedUser);
+
+                userId =
+                    user.id || 0;
+
+            }
+            catch(error){
+
+                userId = 0;
+
+            }
+
+        }
+
+
+        const response =
+            await fetch(
+                "/api/ai",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        user_id:userId,
+
+                        question:question
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        const loadingMessage =
+            document.getElementById(loadingId);
+
+        if(loadingMessage){
+            loadingMessage.remove();
+        }
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.detail ||
+                "Gyami AI could not respond."
+            );
+
+        }
+
+
+        if(data.success){
+
+            const answer =
+                data.answer ||
+                "I couldn't generate a response.";
+
+            addMessage(
+                formatAIResponse(answer),
+                "ai-message"
+            );
+
+        }
+        else{
+
+            addMessage(
+                "🤖 Sorry, I couldn't process that question.",
+                "ai-message"
+            );
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Gyami AI Error:",
+            error
+        );
+
+        const loadingMessage =
+            document.getElementById(loadingId);
+
+        if(loadingMessage){
+            loadingMessage.remove();
+        }
+
+        addMessage(
+            "⚠️ <strong>Gyami AI connection problem</strong><br><br>" +
+            "Please make sure the Gyami backend is running.",
+            "ai-message"
+        );
+
+    }
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "Ask AI 🤖";
+
+}
+
+
+/* ============================================================
+   AI STUDY PLANNER
+============================================================ */
+
+async function createStudyPlan(){
+
+    const subject =
+        document.getElementById("planSubject").value;
+
+    const days =
+        parseInt(
+            document.getElementById("planDays").value
+        );
+
+    const topic =
+        document.getElementById("planTopic").value.trim();
+
+    const time =
+        document.getElementById("planTime").value;
+
+    const goal =
+        document.getElementById("planGoal").value;
+
+    const button =
+        document.getElementById("planButton");
+
+    const result =
+        document.getElementById("planResult");
+
+    const content =
+        document.getElementById("planContent");
+
+
+    if(!topic){
+
+        content.innerHTML =
+            "Please enter what you need to study.";
+
+        result.style.display =
+            "block";
+
+        return;
+    }
+
+
+    if(!days || days < 1){
+
+        content.innerHTML =
+            "Please enter a valid number of study days.";
+
+        result.style.display =
+            "block";
+
+        return;
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Creating your plan... 🧠";
+
+
+    result.style.display =
+        "block";
+
+    content.innerHTML =
+        "🤖 Gyami is preparing your personalized plan...";
+
+
+    const plannerQuestion =
+        "Create a study plan for " +
+        subject +
+        ". I need to study " +
+        topic +
+        " for " +
+        days +
+        " days. I can study for " +
+        time +
+        " per day. My goal is to " +
+        goal +
+        ". Give me a clear day-by-day plan with revision and practice.";
+
+
+    try{
+
+        const storedUser =
+            localStorage.getItem("gyamiUser");
+
+        let userId = 0;
+
+        if(storedUser){
+
+            try{
+
+                const user =
+                    JSON.parse(storedUser);
+
+                userId =
+                    user.id || 0;
+
+            }
+            catch(error){
+
+                userId = 0;
+
+            }
+
+        }
+
+
+        const response =
+            await fetch(
+                "/api/ai",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        user_id:userId,
+
+                        question:plannerQuestion
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.detail ||
+                "Unable to create study plan."
+            );
+
+        }
+
+
+        if(data.success){
+
+            content.innerHTML =
+                formatAIResponse(
+                    data.answer ||
+                    "Unable to create the study plan."
+                );
+
+        }
+        else{
+
+            content.innerHTML =
+                "Gyami could not create the study plan right now.";
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Study Planner Error:",
+            error
+        );
+
+        content.innerHTML =
+            "⚠️ I couldn't create the study plan right now. Please make sure the backend is running.";
+
+    }
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "✨ Create My Study Plan";
+
+}
+
+
+/* ============================================================
+   QUICK QUESTIONS
+============================================================ */
+
+function quickAsk(question){
+
+    const input =
+        document.getElementById("userInput");
+
+    input.value =
+        question;
+
+    askAI();
+
+}
+
+
+/* ============================================================
+   FORMAT AI RESPONSE
+============================================================ */
+
+function formatAIResponse(text){
+
+    let safeText =
+        escapeHtml(text);
+
+    safeText =
+        safeText.replace(
+            /\n/g,
+            "<br>"
+        );
+
+    return safeText;
+
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
+
+function escapeHtml(text){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+
+}
+
+
+/* ============================================================
+   ENTER KEY
+============================================================ */
+
+document
+    .getElementById("userInput")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(event.key === "Enter"){
+
+                askAI();
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

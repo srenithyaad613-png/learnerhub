@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gyami | Progress</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, #182848, transparent 40%),
+                radial-gradient(circle at bottom right, #301934, transparent 40%),
+                #080b16;
+            color: white;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+            background: rgba(10, 14, 30, 0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #8b5cf6;
+        }
+
+        nav a {
+            color: #ddd;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 45px auto;
+        }
+
+        .hero {
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #aaa;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 24px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+        }
+
+        .stat-icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section h2 {
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+
+        .overall-box {
+            padding: 28px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 14px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #7c3aed, #06b6d4);
+            border-radius: 20px;
+            transition: width 0.7s ease;
+        }
+
+        .courses {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .course {
+            padding: 22px;
+        }
+
+        .course-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .course h3 {
+            margin-bottom: 5px;
+        }
+
+        .course small {
+            color: #999;
+        }
+
+        .percentage {
+            color: #b794f4;
+            font-weight: bold;
+        }
+
+        .quiz-list,
+        .assignment-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .quiz-item,
+        .assignment-item {
+            padding: 20px;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .score {
+            font-size: 22px;
+            font-weight: bold;
+            color: #8b5cf6;
+        }
+
+        .muted {
+            color: #999;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .achievement {
+            text-align: center;
+        }
+
+        .achievement-icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .locked {
+            opacity: 0.45;
+        }
+
+        .ai-box {
+            padding: 28px;
+        }
+
+        .ai-box p {
+            color: #bbb;
+            line-height: 1.6;
+            margin: 12px 0 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: #7c3aed;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background: #6d28d9;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 35px;
+            padding-bottom: 40px;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+        }
+
+        .empty {
+            color: #888;
+            padding: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .courses {
+                grid-template-columns: 1fr;
+            }
+
+            .achievement-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .container {
+                width: 92%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">🌐 Gyami <span>✦</span></div>
+
+    <div>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/courses.html">Courses</a>
+        <a href="/ai.html">AI Assistant</a>
+        <a href="/quiz.html">Quiz</a>
+        <a href="/progress.html">Progress</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="hero">
+        <h1>📊 Your Learning Progress</h1>
+        <p>Track your real learning activity from the Gyami database.</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+
+        <div class="card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-number" id="overallProgress">0%</div>
+            <div class="stat-label">Overall Progress</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-number" id="quizCount">0</div>
+            <div class="stat-label">Quizzes Completed</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-number" id="bestScore">0%</div>
+            <div class="stat-label">Best Quiz Score</div>
+        </div>
+
+        <div class="card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-number" id="courseCount">0</div>
+            <div class="stat-label">Courses Available</div>
+        </div>
+
+    </div>
+
+    <!-- OVERALL -->
+    <div class="section">
+        <h2>🚀 Overall Learning Progress</h2>
+
+        <div class="card overall-box">
+
+            <div class="progress-info">
+                <span>Learning Progress</span>
+                <span id="overallText">0%</span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallBar"></div>
+            </div>
+
+            <p style="color:#aaa; margin-top:15px;">
+                Keep learning, keep growing, and keep chasing the dream. 🚀
+            </p>
+
+        </div>
+    </div>
+
+    <!-- COURSES -->
+    <div class="section">
+        <h2>📚 Course Progress</h2>
+
+        <div class="courses" id="coursesList">
+            <div class="card empty">Loading courses...</div>
+        </div>
+    </div>
+
+    <!-- QUIZZES -->
+    <div class="section">
+        <h2>🧠 Recent Quiz Results</h2>
+
+        <div class="quiz-list" id="quizList">
+            <div class="card empty">Loading quiz results...</div>
+        </div>
+    </div>
+
+    <!-- ASSIGNMENTS -->
+    <div class="section">
+        <h2>📝 Assignment Progress</h2>
+
+        <div class="stats">
+
+            <div class="card">
+                <div class="stat-icon">📚</div>
+                <div class="stat-number" id="assignmentTotal">0</div>
+                <div class="stat-label">Total Assignments</div>
+            </div>
+
+            <div class="card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-number" id="assignmentCompleted">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+
+            <div class="card">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-number" id="assignmentPending">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+
+            <div class="card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-number" id="assignmentPercent">0%</div>
+                <div class="stat-label">Completion Rate</div>
+            </div>
+
+        </div>
+
+        <div class="assignment-list" id="assignmentList"></div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="section">
+        <h2>🏆 Achievements</h2>
+
+        <div class="achievement-grid">
+
+            <div class="card achievement" id="achievementQuiz">
+                <div class="achievement-icon">🧠</div>
+                <h3>Quiz Starter</h3>
+                <p class="muted">Complete your first quiz</p>
+            </div>
+
+            <div class="card achievement locked" id="achievementScore">
+                <div class="achievement-icon">🎯</div>
+                <h3>High Scorer</h3>
+                <p class="muted">Score 80% or higher</p>
+            </div>
+
+            <div class="card achievement" id="achievementDreamer">
+                <div class="achievement-icon">🚀</div>
+                <h3>Dreamer</h3>
+                <p class="muted">Keep learning and improving</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- AI -->
+    <div class="section">
+
+        <h2>🤖 Smart AI Recommendation</h2>
+
+        <div class="card ai-box">
+
+            <h3 id="recommendationTitle">Keep Learning!</h3>
+
+            <p id="recommendationText">
+                Your learning journey has started. Keep exploring Gyami and build your knowledge one step at a time.
+            </p>
+
+            <a href="/ai.html" class="button">
+                Ask AI for a Study Plan 🤖
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="footer-links">
+        <a href="/dashboard.html">🏠 Back to Dashboard</a>
+        <a href="/courses.html">📚 Explore Courses</a>
+        <a href="/quiz.html">🧠 Take a Quiz</a>
+        <a href="/focus.html">🎯 Focus Mode</a>
+    </div>
+
+</div>
+
+<script>
+
+const user = JSON.parse(localStorage.getItem("gyamiUser")) || {
+    id: 1
+};
+
+const userId = Number(user.id);
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================
+   LOAD COURSES
+========================= */
+
+async function loadCourses() {
+
+    try {
+
+        const response = await fetch("/api/courses");
+        const data = await response.json();
+
+        const courses = data.courses || [];
+
+        document.getElementById("courseCount").textContent = courses.length;
+
+        const list = document.getElementById("coursesList");
+
+        if (!courses.length) {
+            list.innerHTML = `<div class="card empty">No courses available.</div>`;
+            return;
+        }
+
+        list.innerHTML = courses.map(course => {
+
+            const progress = Number(course.progress || 0);
+
+            return `
+                <div class="card course">
+
+                    <div class="course-top">
+
+                        <div>
+                            <h3>${escapeHTML(course.title)}</h3>
+                            <small>${escapeHTML(course.category || "General")}</small>
+                        </div>
+
+                        <div class="percentage">
+                            ${progress}%
+                        </div>
+
+                    </div>
+
+                    <div class="progress-bar">
+                        <div
+                            class="progress-fill"
+                            style="width:${Math.min(100, Math.max(0, progress))}%">
+                        </div>
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        console.error("Course error:", error);
+
+        document.getElementById("coursesList").innerHTML =
+            `<div class="card empty">Unable to load courses.</div>`;
+    }
+}
+
+
+/* =========================
+   LOAD QUIZZES
+========================= */
+
+async function loadQuizzes() {
+
+    try {
+
+        const response = await fetch(`/api/tests/${userId}`);
+        const data = await response.json();
+
+        const tests = data.tests || [];
+
+        document.getElementById("quizCount").textContent = tests.length;
+
+        let best = 0;
+
+        tests.forEach(test => {
+
+            const score = Number(test.score || 0);
+            const total = Number(test.total || 0);
+
+            if (total > 0) {
+
+                const percent = Math.round((score / total) * 100);
+
+                if (percent > best) {
+                    best = percent;
+                }
+            }
+
+        });
+
+        document.getElementById("bestScore").textContent = best + "%";
+
+        const list = document.getElementById("quizList");
+
+        if (!tests.length) {
+
+            list.innerHTML =
+                `<div class="card empty">
+                    No quiz attempts yet. Take your first quiz! 🧠
+                </div>`;
+
+            updateRecommendation(0, 0);
+            return;
+        }
+
+        list.innerHTML = tests.slice(0, 5).map(test => {
+
+            const score = Number(test.score || 0);
+            const total = Number(test.total || 0);
+
+            const percent = total > 0
+                ? Math.round((score / total) * 100)
+                : 0;
+
+            return `
+                <div class="card quiz-item">
+
+                    <div class="item-row">
+
+                        <div>
+                            <h3>${escapeHTML(test.title || "Gyami Quiz")}</h3>
+
+                            <div class="muted">
+                                ${escapeHTML(test.subject || "General Knowledge")}
+                            </div>
+
+                            <div class="muted">
+                                ${escapeHTML(test.created_at || "")}
+                            </div>
+                        </div>
+
+                        <div style="text-align:right">
+                            <div class="score">
+                                ${score}/${total}
+                            </div>
+
+                            <div class="muted">
+                                ${percent}%
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+        updateRecommendation(tests.length, best);
+
+        if (tests.length > 0) {
+            document.getElementById("achievementQuiz")
+                .style.opacity = "1";
+        }
+
+        if (best >= 80) {
+            document.getElementById("achievementScore")
+                .classList.remove("locked");
+        }
+
+    } catch (error) {
+
+        console.error("Quiz error:", error);
+
+        document.getElementById("quizList").innerHTML =
+            `<div class="card empty">
+                Unable to load quiz results.
+            </div>`;
+    }
+}
+
+
+/* =========================
+   LOAD ASSIGNMENTS
+========================= */
+
+async function loadAssignments() {
+
+    try {
+
+        const response =
+            await fetch(`/api/assignments/${userId}`);
+
+        const data = await response.json();
+
+        const assignments = data.assignments || [];
+
+        const total = assignments.length;
+
+        const completed = assignments.filter(item =>
+            item.status === "completed" ||
+            item.completed === 1 ||
+            item.completed === true
+        ).length;
+
+        const pending = total - completed;
+
+        const percent = total > 0
+            ? Math.round((completed / total) * 100)
+            : 0;
+
+        document.getElementById("assignmentTotal").textContent = total;
+        document.getElementById("assignmentCompleted").textContent = completed;
+        document.getElementById("assignmentPending").textContent = pending;
+        document.getElementById("assignmentPercent").textContent = percent + "%";
+
+        const list = document.getElementById("assignmentList");
+
+        if (!assignments.length) {
+
+            list.innerHTML =
+                `<div class="card empty">
+                    No assignments recorded yet.
+                </div>`;
+
+            return;
+        }
+
+        list.innerHTML = assignments.map(item => {
+
+            const done =
+                item.status === "completed" ||
+                item.completed === 1 ||
+                item.completed === true;
+
+            return `
+                <div class="card assignment-item">
+
+                    <div class="item-row">
+
+                        <div>
+                            <h3>${escapeHTML(item.title || "Assignment")}</h3>
+
+                            <div class="muted">
+                                ${escapeHTML(item.subject || "")}
+                            </div>
+
+                            <div class="muted">
+                                📅 Due: ${escapeHTML(item.due_date || "Not specified")}
+                            </div>
+                        </div>
+
+                        <div>
+                            ${done
+                                ? "✅ Completed"
+                                : "⏳ Pending"}
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        console.error("Assignment error:", error);
+
+        document.getElementById("assignmentList").innerHTML =
+            `<div class="card empty">
+                Unable to load assignments.
+            </div>`;
+    }
+}
+
+
+/* =========================
+   RECOMMENDATION
+========================= */
+
+function updateRecommendation(count, best) {
+
+    const title =
+        document.getElementById("recommendationTitle");
+
+    const text =
+        document.getElementById("recommendationText");
+
+    if (count === 0) {
+
+        title.textContent = "Start Your Journey! 🚀";
+
+        text.textContent =
+            "Take your first Gyami quiz and begin building your learning progress.";
+
+    } else if (best >= 80) {
+
+        title.textContent = "Excellent Work! 🏆";
+
+        text.textContent =
+            "Your quiz performance is strong. Keep challenging yourself and explore more courses.";
+
+    } else {
+
+        title.textContent = "Keep Practicing! 📚";
+
+        text.textContent =
+            "Review the concepts you found difficult and try another quiz. Every attempt helps you improve.";
+    }
+}
+
+
+/* =========================
+   OVERALL PROGRESS
+========================= */
+
+async function calculateOverallProgress() {
+
+    try {
+
+        const response =
+            await fetch(`/api/progress/${userId}`);
+
+        const data = await response.json();
+
+        let progress = 0;
+
+        if (Array.isArray(data.progress) && data.progress.length) {
+
+            const values = data.progress
+                .map(item => Number(item.progress || 0))
+                .filter(value => !isNaN(value));
+
+            if (values.length) {
+
+                progress = Math.round(
+                    values.reduce((a, b) => a + b, 0) / values.length
+                );
+            }
+        }
+
+        progress = Math.min(100, Math.max(0, progress));
+
+        document.getElementById("overallProgress").textContent =
+            progress + "%";
+
+        document.getElementById("overallText").textContent =
+            progress + "%";
+
+        document.getElementById("overallBar").style.width =
+            progress + "%";
+
+    } catch (error) {
+
+        console.error("Progress error:", error);
+
+        document.getElementById("overallProgress").textContent = "0%";
+        document.getElementById("overallText").textContent = "0%";
+    }
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadCourses();
+loadQuizzes();
+loadAssignments();
+calculateOverallProgress();
+
+</script>
+</body>
+</html>

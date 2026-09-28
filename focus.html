@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gyami | Focus Mode</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #24245f 0%, transparent 35%),
+                radial-gradient(circle at bottom right, #123f52 0%, transparent 35%),
+                linear-gradient(135deg, #080812, #101025, #080812);
+            color: white;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #9b7cff;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 10px 17px;
+            border-radius: 12px;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #b8b8cc;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 22px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 22px;
+            padding: 25px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .timer-card {
+            text-align: center;
+        }
+
+        .timer-title {
+            color: #c7c7dc;
+            margin-bottom: 18px;
+        }
+
+        .timer {
+            font-size: 85px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            margin: 15px 0 25px;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: #17172b;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            padding: 13px 23px;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            background: #6955e8;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        button.pause {
+            background: #b66a28;
+        }
+
+        button.reset {
+            background: #8d3448;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status {
+            margin-top: 18px;
+            min-height: 22px;
+            color: #a9a9bd;
+        }
+
+        .stats-title {
+            font-size: 21px;
+            margin-bottom: 18px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .stat {
+            padding: 18px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .stat-value {
+            font-size: 27px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #aaaabd;
+            font-size: 13px;
+        }
+
+        .section {
+            margin-top: 22px;
+        }
+
+        .section h2 {
+            font-size: 21px;
+            margin-bottom: 15px;
+        }
+
+        .subject-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            color: #c8c8d8;
+        }
+
+        .subject-row:last-child {
+            border-bottom: none;
+        }
+
+        .history-item {
+            padding: 14px;
+            margin-bottom: 10px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .history-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .history-subject {
+            font-weight: bold;
+        }
+
+        .history-time {
+            color: #aaaabd;
+            font-size: 13px;
+        }
+
+        .history-date {
+            color: #88889d;
+            font-size: 12px;
+        }
+
+        .empty {
+            color: #9292a6;
+            padding: 10px 0;
+        }
+
+        @media (max-width: 800px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timer {
+                font-size: 65px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 15px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .timer {
+                font-size: 52px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="topbar">
+        <div class="logo">Gya<span>mi</span> ✦</div>
+
+        <a href="/dashboard.html" class="back-btn">
+            ← Dashboard
+        </a>
+    </div>
+
+    <div class="hero">
+        <h1>🎯 Focus Mode</h1>
+        <p>Focus on the dream. One session at a time.</p>
+    </div>
+
+    <div class="main-grid">
+
+        <!-- TIMER -->
+        <div class="card timer-card">
+
+            <div class="timer-title">
+                Choose what you want to focus on
+            </div>
+
+            <select id="subject">
+                <option value="Python Programming">Python Programming</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Artificial Intelligence">Artificial Intelligence</option>
+                <option value="Web Development">Web Development</option>
+            </select>
+
+            <div id="timer" class="timer">
+                25:00
+            </div>
+
+            <div class="buttons">
+
+                <button id="startBtn" onclick="startTimer()">
+                    ▶ Start
+                </button>
+
+                <button id="pauseBtn" class="pause" onclick="pauseTimer()" disabled>
+                    ⏸ Pause
+                </button>
+
+                <button id="resetBtn" class="reset" onclick="resetTimer()">
+                    ↻ Reset
+                </button>
+
+            </div>
+
+            <div id="status" class="status">
+                Ready to focus ✨
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+        <div class="card">
+
+            <div class="stats-title">
+                📊 Your Focus Stats
+            </div>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <div class="stat-value" id="totalFocus">
+                        0 min
+                    </div>
+                    <div class="stat-label">
+                        Total Focus Time
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-value" id="sessionsCompleted">
+                        0
+                    </div>
+                    <div class="stat-label">
+                        Sessions Completed
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-value" id="averageSession">
+                        0 min
+                    </div>
+                    <div class="stat-label">
+                        Average Session
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-value" id="todayFocus">
+                        0 min
+                    </div>
+                    <div class="stat-label">
+                        Today's Focus
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUBJECT BREAKDOWN -->
+    <div class="card section">
+
+        <h2>📚 Subject Breakdown</h2>
+
+        <div id="subjectBreakdown">
+            <div class="empty">
+                No focus sessions yet.
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+    <div class="card section">
+
+        <h2>🕒 Focus History</h2>
+
+        <div id="history">
+            <div class="empty">
+                No focus sessions yet.
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* ================================
+       USER
+    ================================= */
+
+    let user = null;
+
+    try {
+        user = JSON.parse(localStorage.getItem("gyamiUser"));
+    } catch (error) {
+        user = null;
+    }
+
+    let userId = 0;
+
+    if (user) {
+        userId = Number(user.id || user.user_id || 0);
+    }
+
+
+    /* ================================
+       TIMER
+    ================================= */
+
+    const SESSION_SECONDS = 25 * 60;
+
+    let remainingSeconds = SESSION_SECONDS;
+    let timerInterval = null;
+    let timerRunning = false;
+    let sessionStarted = false;
+
+
+    const timerElement = document.getElementById("timer");
+    const startButton = document.getElementById("startBtn");
+    const pauseButton = document.getElementById("pauseBtn");
+    const subjectElement = document.getElementById("subject");
+    const statusElement = document.getElementById("status");
+
+
+    function updateTimerDisplay() {
+
+        const minutes = Math.floor(remainingSeconds / 60);
+
+        const seconds = remainingSeconds % 60;
+
+        timerElement.textContent =
+            String(minutes).padStart(2, "0") +
+            ":" +
+            String(seconds).padStart(2, "0");
+    }
+
+
+    function startTimer() {
+
+        if (timerRunning) {
+            return;
+        }
+
+        if (!sessionStarted) {
+            sessionStarted = true;
+
+            subjectElement.disabled = true;
+
+            statusElement.textContent =
+                "Focus session running... 🎯";
+        }
+
+        timerRunning = true;
+
+        startButton.disabled = true;
+
+        pauseButton.disabled = false;
+
+        timerInterval = setInterval(function () {
+
+            if (remainingSeconds > 0) {
+
+                remainingSeconds--;
+
+                updateTimerDisplay();
+
+            } else {
+
+                completeSession();
+
+            }
+
+        }, 1000);
+    }
+
+
+    function pauseTimer() {
+
+        if (!timerRunning) {
+            return;
+        }
+
+        clearInterval(timerInterval);
+
+        timerInterval = null;
+
+        timerRunning = false;
+
+        startButton.disabled = false;
+
+        pauseButton.disabled = true;
+
+        statusElement.textContent =
+            "Session paused ⏸️";
+    }
+
+
+    function resetTimer() {
+
+        clearInterval(timerInterval);
+
+        timerInterval = null;
+
+        timerRunning = false;
+
+        sessionStarted = false;
+
+        remainingSeconds = SESSION_SECONDS;
+
+        updateTimerDisplay();
+
+        startButton.disabled = false;
+
+        pauseButton.disabled = true;
+
+        subjectElement.disabled = false;
+
+        statusElement.textContent =
+            "Ready to focus ✨";
+    }
+
+
+    async function completeSession() {
+
+        clearInterval(timerInterval);
+
+        timerInterval = null;
+
+        timerRunning = false;
+
+        startButton.disabled = false;
+
+        pauseButton.disabled = true;
+
+        subjectElement.disabled = false;
+
+        const subject = subjectElement.value;
+
+        statusElement.textContent =
+            "Session complete! Saving your focus session... 🎉";
+
+        await saveFocusSession(subject, 25);
+
+        remainingSeconds = SESSION_SECONDS;
+
+        sessionStarted = false;
+
+        updateTimerDisplay();
+
+        statusElement.textContent =
+            "Great work! Your session has been saved. 🌟";
+    }
+
+
+    /* ================================
+       SAVE FOCUS SESSION
+    ================================= */
+
+    async function saveFocusSession(subject, minutes) {
+
+        if (!userId) {
+
+            statusElement.textContent =
+                "Please login first to save your focus session.";
+
+            return;
+        }
+
+        try {
+
+            const response = await fetch("/api/focus", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    user_id: userId,
+
+                    subject: subject,
+
+                    duration_minutes: minutes
+
+                })
+
+            });
+
+
+            const data = await response.json();
+
+
+            if (!response.ok || data.success === false) {
+
+                throw new Error(
+                    data.detail ||
+                    data.message ||
+                    "Could not save focus session."
+                );
+            }
+
+
+            await loadFocusData();
+
+
+        } catch (error) {
+
+            console.error("Focus save error:", error);
+
+            statusElement.textContent =
+                "Session finished, but it could not be saved.";
+
+        }
+
+    }
+
+
+    /* ================================
+       LOAD FOCUS DATA
+    ================================= */
+
+    async function loadFocusData() {
+
+        if (!userId) {
+
+            showEmptyStats();
+
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                "/api/focus/" + encodeURIComponent(userId)
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok || data.success === false) {
+
+                throw new Error(
+                    data.detail ||
+                    data.message ||
+                    "Could not load focus data."
+                );
+            }
+
+
+            const sessions =
+                Array.isArray(data.focus)
+                    ? data.focus
+                    : Array.isArray(data.sessions)
+                        ? data.sessions
+                        : [];
+
+
+            renderFocusData(sessions);
+
+
+        } catch (error) {
+
+            console.error("Focus loading error:", error);
+
+            showEmptyStats();
+
+        }
+
+    }
+
+
+    /* ================================
+       RENDER DATA
+    ================================= */
+
+    function renderFocusData(sessions) {
+
+        let totalMinutes = 0;
+
+        let todayMinutes = 0;
+
+        const subjectTotals = {};
+
+        const today = new Date();
+
+        const todayString =
+            today.toISOString().slice(0, 10);
+
+
+        sessions.forEach(function(session) {
+
+            const minutes = Number(
+                session.duration_minutes ||
+                session.duration ||
+                session.minutes ||
+                0
+            );
+
+            totalMinutes += minutes;
+
+
+            const subject =
+                session.subject ||
+                "General Study";
+
+
+            if (!subjectTotals[subject]) {
+                subjectTotals[subject] = 0;
+            }
+
+            subjectTotals[subject] += minutes;
+
+
+            const dateValue =
+                session.created_at ||
+                session.session_date ||
+                session.date ||
+                session.timestamp ||
+                "";
+
+
+            if (dateValue) {
+
+                const sessionDate =
+                    new Date(dateValue);
+
+                if (
+                    !isNaN(sessionDate.getTime()) &&
+                    sessionDate.toISOString().slice(0, 10) === todayString
+                ) {
+                    todayMinutes += minutes;
+                }
+
+            }
+
+        });
+
+
+        const completedSessions =
+            sessions.length;
+
+
+        const average =
+            completedSessions > 0
+                ? Math.round(totalMinutes / completedSessions)
+                : 0;
+
+
+        document.getElementById("totalFocus").textContent =
+            totalMinutes + " min";
+
+
+        document.getElementById("sessionsCompleted").textContent =
+            completedSessions;
+
+
+        document.getElementById("averageSession").textContent =
+            average + " min";
+
+
+        document.getElementById("todayFocus").textContent =
+            todayMinutes + " min";
+
+
+        renderSubjects(subjectTotals);
+
+        renderHistory(sessions);
+
+    }
+
+
+    /* ================================
+       SUBJECTS
+    ================================= */
+
+    function renderSubjects(subjectTotals) {
+
+        const container =
+            document.getElementById("subjectBreakdown");
+
+
+        const subjects =
+            Object.keys(subjectTotals);
+
+
+        if (subjects.length === 0) {
+
+            container.innerHTML =
+                '<div class="empty">No focus sessions yet.</div>';
+
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        subjects
+            .sort(function(a, b) {
+                return subjectTotals[b] - subjectTotals[a];
+            })
+            .forEach(function(subject) {
+
+                const row =
+                    document.createElement("div");
+
+                row.className =
+                    "subject-row";
+
+
+                row.innerHTML =
+
+                    "<span>" +
+                    escapeHTML(subject) +
+                    "</span>" +
+
+                    "<strong>" +
+                    subjectTotals[subject] +
+                    " min</strong>";
+
+
+                container.appendChild(row);
+
+            });
+
+    }
+
+
+    /* ================================
+       HISTORY
+    ================================= */
+
+    function renderHistory(sessions) {
+
+        const container =
+            document.getElementById("history");
+
+
+        if (!sessions.length) {
+
+            container.innerHTML =
+                '<div class="empty">No focus sessions yet.</div>';
+
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        sessions
+            .slice()
+            .reverse()
+            .slice(0, 10)
+            .forEach(function(session) {
+
+                const subject =
+                    session.subject ||
+                    "General Study";
+
+
+                const minutes =
+                    Number(
+                        session.duration_minutes ||
+                        session.duration ||
+                        session.minutes ||
+                        0
+                    );
+
+
+                const dateValue =
+                    session.created_at ||
+                    session.session_date ||
+                    session.date ||
+                    session.timestamp ||
+                    "";
+
+
+                let formattedDate =
+                    "Recently";
+
+
+                if (dateValue) {
+
+                    const date =
+                        new Date(dateValue);
+
+                    if (!isNaN(date.getTime())) {
+
+                        formattedDate =
+                            date.toLocaleString();
+
+                    }
+
+                }
+
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "history-item";
+
+
+                item.innerHTML =
+
+                    '<div class="history-top">' +
+
+                        '<span class="history-subject">' +
+                        escapeHTML(subject) +
+                        "</span>" +
+
+                        '<span class="history-time">' +
+                        minutes +
+                        " min</span>" +
+
+                    "</div>" +
+
+                    '<div class="history-date">' +
+                    escapeHTML(formattedDate) +
+                    "</div>";
+
+
+                container.appendChild(item);
+
+            });
+
+    }
+
+
+    /* ================================
+       EMPTY STATE
+    ================================= */
+
+    function showEmptyStats() {
+
+        document.getElementById("totalFocus").textContent =
+            "0 min";
+
+        document.getElementById("sessionsCompleted").textContent =
+            "0";
+
+        document.getElementById("averageSession").textContent =
+            "0 min";
+
+        document.getElementById("todayFocus").textContent =
+            "0 min";
+
+        document.getElementById("subjectBreakdown").innerHTML =
+            '<div class="empty">No focus sessions yet.</div>';
+
+        document.getElementById("history").innerHTML =
+            '<div class="empty">No focus sessions yet.</div>';
+
+    }
+
+
+    /* ================================
+       SECURITY
+    ================================= */
+
+    function escapeHTML(value) {
+
+        return String(value)
+
+            .replace(/&/g, "&amp;")
+
+            .replace(/</g, "&lt;")
+
+            .replace(/>/g, "&gt;")
+
+            .replace(/"/g, "&quot;")
+
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* ================================
+       PAGE START
+    ================================= */
+
+    updateTimerDisplay();
+
+    loadFocusData();
+
+</script>
+
+</body>
+</html>

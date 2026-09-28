@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gyami - My Notes</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
+            color: white;
+            min-height: 100vh;
+        }
+
+        nav {
+            padding: 20px 6%;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            background: rgba(0,0,0,0.25);
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+        }
+
+        nav a:hover {
+            opacity: 1;
+            color: #a5b4fc;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+        }
+
+        h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            margin-bottom: 35px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #cbd5e1;
+        }
+
+        textarea {
+            min-height: 160px;
+            resize: vertical;
+        }
+
+        button {
+            border: none;
+            padding: 13px 22px;
+            border-radius: 12px;
+            background: #6366f1;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #818cf8;
+        }
+
+        #message {
+            margin-top: 15px;
+            color: #a5f3fc;
+        }
+
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .note {
+            background: rgba(255,255,255,0.07);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #818cf8;
+        }
+
+        .note h3 {
+            margin-bottom: 10px;
+            color: #e0e7ff;
+        }
+
+        .note p {
+            color: #cbd5e1;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .empty {
+            color: #cbd5e1;
+            padding: 15px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #cbd5e1;
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                gap: 12px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">Gyami ✦</div>
+
+    <a href="/dashboard.html">Dashboard</a>
+    <a href="/courses.html">Courses</a>
+    <a href="/books.html">Books</a>
+    <a href="/ai.html">AI</a>
+    <a href="/quiz.html">Quiz</a>
+    <a href="/progress.html">Progress</a>
+    <a href="/about.html">About</a>
+</nav>
+
+<div class="container">
+
+    <h1>My Notes 📝</h1>
+    <p class="subtitle">
+        Save your important thoughts, concepts and study notes in Gyami.
+    </p>
+
+    <div class="card">
+        <h2>Create a New Note ✨</h2>
+
+        <input
+            type="text"
+            id="title"
+            placeholder="Note Title"
+        >
+
+        <textarea
+            id="content"
+            placeholder="Your Note"
+        ></textarea>
+
+        <button onclick="saveNote()">💾 Save Note</button>
+
+        <div id="message"></div>
+    </div>
+
+    <div class="card">
+        <div class="notes-header">
+            <h2>Saved Notes</h2>
+            <span id="noteCount">0 notes</span>
+        </div>
+
+        <div id="notesList">
+            <div class="empty">Loading notes...</div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    Gyami • The Dreamers Dream ✨
+</footer>
+
+<script>
+
+    const API = "/api";
+
+    // Get logged-in user
+    let user = JSON.parse(localStorage.getItem("gyamiUser") || "null");
+
+    // If no user is stored, use user ID 1
+    const userId = user && user.id ? user.id : 1;
+
+
+    // -------------------------
+    // LOAD NOTES
+    // -------------------------
+
+    async function loadNotes() {
+
+        const notesList = document.getElementById("notesList");
+        const noteCount = document.getElementById("noteCount");
+
+        try {
+
+            const response = await fetch(`${API}/notes/${userId}`);
+
+            if (!response.ok) {
+                throw new Error("Could not load notes");
+            }
+
+            const data = await response.json();
+
+            const notes = data.notes || [];
+
+            noteCount.textContent =
+                `${notes.length} ${notes.length === 1 ? "note" : "notes"}`;
+
+            if (notes.length === 0) {
+
+                notesList.innerHTML =
+                    `<div class="empty">No notes yet. Create your first note above ✨</div>`;
+
+                return;
+            }
+
+            notesList.innerHTML = notes.map(note => {
+
+                const title = escapeHTML(note.title || "Untitled Note");
+                const content = escapeHTML(note.content || "");
+
+                return `
+                    <div class="note">
+                        <h3>${title}</h3>
+                        <p>${content}</p>
+                    </div>
+                `;
+
+            }).join("");
+
+        } catch (error) {
+
+            console.error(error);
+
+            notesList.innerHTML =
+                `<div class="empty">
+                    Unable to load notes. Please make sure the backend is running.
+                </div>`;
+        }
+    }
+
+
+    // -------------------------
+    // SAVE NOTE
+    // -------------------------
+
+    async function saveNote() {
+
+        const titleInput = document.getElementById("title");
+        const contentInput = document.getElementById("content");
+        const message = document.getElementById("message");
+
+        const title = titleInput.value.trim();
+        const content = contentInput.value.trim();
+
+        if (!title || !content) {
+
+            message.textContent =
+                "Please enter both a title and a note.";
+
+            return;
+        }
+
+        message.textContent = "Saving...";
+
+        try {
+
+            const response = await fetch(`${API}/notes`, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    user_id: userId,
+                    title: title,
+                    content: content
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || data.success === false) {
+                throw new Error(data.detail || "Failed to save note");
+            }
+
+            message.textContent = "✅ Note saved successfully!";
+
+            titleInput.value = "";
+            contentInput.value = "";
+
+            // Immediately reload notes
+            await loadNotes();
+
+            setTimeout(() => {
+                message.textContent = "";
+            }, 2000);
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.textContent =
+                "❌ Could not save the note. Please try again.";
+        }
+    }
+
+
+    // -------------------------
+    // SECURITY
+    // -------------------------
+
+    function escapeHTML(text) {
+
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    // Load notes when page opens
+    loadNotes();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gyami | Smart Quiz</title>
+
+    <style>
+
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            color:white;
+            background:
+                radial-gradient(circle at top left,#172554 0%,transparent 35%),
+                radial-gradient(circle at bottom right,#312e81 0%,transparent 35%),
+                linear-gradient(135deg,#020617,#0f172a,#111827);
+        }
+
+        nav{
+            width:100%;
+            padding:20px 7%;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-bottom:1px solid rgba(255,255,255,.1);
+            background:rgba(2,6,23,.65);
+            backdrop-filter:blur(12px);
+        }
+
+        .logo{
+            font-size:25px;
+            font-weight:bold;
+            letter-spacing:1px;
+        }
+
+        .logo span{
+            color:#a78bfa;
+        }
+
+        nav a{
+            color:#cbd5e1;
+            text-decoration:none;
+            margin-left:22px;
+            font-size:14px;
+            transition:.3s;
+        }
+
+        nav a:hover{
+            color:white;
+        }
+
+        .container{
+            width:90%;
+            max-width:900px;
+            margin:50px auto;
+        }
+
+        .header{
+            text-align:center;
+            margin-bottom:35px;
+        }
+
+        .header h1{
+            font-size:42px;
+            margin-bottom:12px;
+        }
+
+        .header p{
+            color:#94a3b8;
+            font-size:17px;
+        }
+
+        .quiz-card{
+            background:rgba(15,23,42,.72);
+            border:1px solid rgba(255,255,255,.1);
+            border-radius:25px;
+            padding:35px;
+            box-shadow:0 20px 60px rgba(0,0,0,.35);
+            backdrop-filter:blur(15px);
+        }
+
+        .progress-bar{
+            height:8px;
+            width:100%;
+            background:#1e293b;
+            border-radius:20px;
+            overflow:hidden;
+            margin-bottom:30px;
+        }
+
+        .progress{
+            height:100%;
+            width:20%;
+            background:linear-gradient(90deg,#8b5cf6,#38bdf8);
+            transition:.3s;
+        }
+
+        .question-number{
+            color:#a78bfa;
+            font-size:14px;
+            margin-bottom:12px;
+            font-weight:bold;
+        }
+
+        .question{
+            font-size:25px;
+            line-height:1.4;
+            margin-bottom:25px;
+        }
+
+        .options{
+            display:grid;
+            gap:14px;
+        }
+
+        .option{
+            width:100%;
+            padding:17px 20px;
+            border-radius:14px;
+            border:1px solid rgba(255,255,255,.1);
+            background:rgba(30,41,59,.7);
+            color:#e2e8f0;
+            text-align:left;
+            cursor:pointer;
+            font-size:16px;
+            transition:.25s;
+        }
+
+        .option:hover{
+            border-color:#8b5cf6;
+            transform:translateY(-2px);
+        }
+
+        .option.selected{
+            border-color:#a78bfa;
+            background:rgba(124,58,237,.25);
+        }
+
+        .next-btn{
+            margin-top:28px;
+            width:100%;
+            padding:16px;
+            border:none;
+            border-radius:14px;
+            background:linear-gradient(90deg,#7c3aed,#2563eb);
+            color:white;
+            font-size:16px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:.25s;
+        }
+
+        .next-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 10px 25px rgba(99,102,241,.25);
+        }
+
+        .next-btn:disabled{
+            opacity:.45;
+            cursor:not-allowed;
+            transform:none;
+            box-shadow:none;
+        }
+
+        .result{
+            text-align:center;
+        }
+
+        .result-icon{
+            font-size:60px;
+            margin-bottom:15px;
+        }
+
+        .result h2{
+            font-size:32px;
+            margin-bottom:12px;
+        }
+
+        .score{
+            font-size:58px;
+            font-weight:bold;
+            margin:20px 0;
+            color:#a78bfa;
+        }
+
+        .result p{
+            color:#94a3b8;
+            font-size:17px;
+            margin-bottom:20px;
+        }
+
+        .feedback{
+            margin-top:25px;
+            padding:22px;
+            border-radius:18px;
+            background:rgba(30,41,59,.7);
+            border:1px solid rgba(255,255,255,.08);
+        }
+
+        .feedback h3{
+            margin-bottom:10px;
+            color:#c4b5fd;
+        }
+
+        .save-status{
+            margin-top:18px;
+            font-size:14px;
+            color:#94a3b8;
+        }
+
+        .retry-btn{
+            margin-top:25px;
+            padding:14px 25px;
+            border:none;
+            border-radius:12px;
+            background:#334155;
+            color:white;
+            cursor:pointer;
+            font-size:15px;
+        }
+
+        .retry-btn:hover{
+            background:#475569;
+        }
+
+        .back-btn{
+            display:inline-block;
+            margin-top:25px;
+            color:#c4b5fd;
+            text-decoration:none;
+        }
+
+        footer{
+            text-align:center;
+            padding:35px;
+            color:#64748b;
+            font-size:13px;
+        }
+
+        @media(max-width:700px){
+
+            nav{
+                padding:18px 5%;
+                flex-direction:column;
+                gap:15px;
+            }
+
+            nav a{
+                margin:0 7px;
+            }
+
+            .container{
+                width:94%;
+                margin:30px auto;
+            }
+
+            .quiz-card{
+                padding:25px 18px;
+            }
+
+            .header h1{
+                font-size:32px;
+            }
+
+            .question{
+                font-size:21px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        Gyami <span>✦</span>
+    </div>
+
+    <div>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/courses.html">Courses</a>
+        <a href="/ai.html">AI Assistant</a>
+        <a href="/quiz.html">Quiz</a>
+        <a href="/progress.html">Progress</a>
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>Smart Quiz 🧠</h1>
+
+        <p>
+            Test your knowledge and discover what you know.
+        </p>
+
+    </div>
+
+
+    <div class="quiz-card" id="quizCard">
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="question-number" id="questionNumber">
+            Question 1 of 5
+        </div>
+
+        <div class="question" id="question">
+            Loading question...
+        </div>
+
+        <div class="options" id="options"></div>
+
+        <button
+            class="next-btn"
+            id="nextBtn"
+            disabled
+            onclick="nextQuestion()"
+        >
+            Next Question →
+        </button>
+
+    </div>
+
+</div>
+
+
+<footer>
+    Gyami • Smart Education for Every Student 🌍
+</footer>
+
+
+<script>
+
+const questions = [
+
+    {
+        question:"Which of the following is a major advantage of Python?",
+        options:[
+            "Readable and easy-to-understand syntax",
+            "It can only run on one operating system",
+            "It cannot use libraries",
+            "It does not support functions"
+        ],
+        answer:0
+    },
+
+    {
+        question:"According to Newton's Second Law, what is the relationship between force, mass and acceleration?",
+        options:[
+            "F = ma",
+            "F = m/a",
+            "F = a/m",
+            "F = m + a"
+        ],
+        answer:0
+    },
+
+    {
+        question:"Which of the following is a renewable source of energy?",
+        options:[
+            "Coal",
+            "Petroleum",
+            "Solar Energy",
+            "Natural Gas"
+        ],
+        answer:2
+    },
+
+    {
+        question:"What does AI stand for?",
+        options:[
+            "Automated Internet",
+            "Artificial Intelligence",
+            "Advanced Information",
+            "Automatic Interface"
+        ],
+        answer:1
+    },
+
+    {
+        question:"Which HTML element is used to create a hyperlink?",
+        options:[
+            "<link>",
+            "<href>",
+            "<a>",
+            "<url>"
+        ],
+        answer:2
+    }
+
+];
+
+
+let currentQuestion = 0;
+let selectedAnswer = null;
+let userAnswers = [];
+
+
+const questionNumber =
+    document.getElementById("questionNumber");
+
+const questionText =
+    document.getElementById("question");
+
+const optionsContainer =
+    document.getElementById("options");
+
+const nextBtn =
+    document.getElementById("nextBtn");
+
+const progress =
+    document.getElementById("progress");
+
+
+function loadQuestion(){
+
+    const q = questions[currentQuestion];
+
+    selectedAnswer = null;
+
+    questionNumber.textContent =
+        `Question ${currentQuestion + 1} of ${questions.length}`;
+
+    questionText.textContent =
+        q.question;
+
+    optionsContainer.innerHTML = "";
+
+    q.options.forEach((option,index)=>{
+
+        const button =
+            document.createElement("button");
+
+        button.className = "option";
+
+        button.textContent = option;
+
+        button.onclick = function(){
+
+            selectAnswer(index,button);
+
+        };
+
+        optionsContainer.appendChild(button);
+
+    });
+
+
+    nextBtn.disabled = true;
+
+    if(currentQuestion === questions.length - 1){
+
+        nextBtn.textContent = "Finish Quiz ✓";
+
+    }else{
+
+        nextBtn.textContent = "Next Question →";
+
+    }
+
+
+    progress.style.width =
+        `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+}
+
+
+function selectAnswer(index,button){
+
+    selectedAnswer = index;
+
+    document
+        .querySelectorAll(".option")
+        .forEach(option=>{
+            option.classList.remove("selected");
+        });
+
+    button.classList.add("selected");
+
+    nextBtn.disabled = false;
+
+}
+
+
+function nextQuestion(){
+
+    if(selectedAnswer === null){
+
+        return;
+
+    }
+
+
+    userAnswers[currentQuestion] =
+        selectedAnswer;
+
+
+    if(currentQuestion < questions.length - 1){
+
+        currentQuestion++;
+
+        loadQuestion();
+
+    }else{
+
+        showResult();
+
+    }
+
+}
+
+
+async function showResult(){
+
+    let score = 0;
+
+
+    questions.forEach((question,index)=>{
+
+        if(userAnswers[index] === question.answer){
+
+            score++;
+
+        }
+
+    });
+
+
+    const finalScore = score;
+
+
+    document.getElementById("quizCard").innerHTML = `
+
+        <div class="result">
+
+            <div class="result-icon">
+                ${finalScore >= 4 ? "🎉" : "📚"}
+            </div>
+
+            <h2>
+                ${finalScore >= 3 ? "Great Work!" : "Keep Practicing!"}
+            </h2>
+
+            <div class="score">
+                ${finalScore}/${questions.length}
+            </div>
+
+            <p>
+                ${
+                    finalScore === questions.length
+                    ? "Perfect score! Excellent understanding of the concepts."
+                    : finalScore >= 3
+                    ? "You have a good understanding of the concepts."
+                    : "Keep learning and practicing. You are getting there!"
+                }
+            </p>
+
+
+            <div class="feedback">
+
+                <h3>
+                    🤖 Gyami Smart Feedback
+                </h3>
+
+                <p>
+                    ${
+                        finalScore === questions.length
+                        ? "Excellent! You have mastered these topics. Keep challenging yourself."
+                        : "Review the questions you missed and practice those topics once more."
+                    }
+                </p>
+
+            </div>
+
+
+            <div
+                class="save-status"
+                id="saveStatus"
+            >
+                💾 Saving your result...
+            </div>
+
+
+            <button
+                class="retry-btn"
+                onclick="location.reload()"
+            >
+                Try Again 🔄
+            </button>
+
+            <br>
+
+            <a
+                href="/dashboard.html"
+                class="back-btn"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    `;
+
+
+    await saveQuizResult(finalScore);
+
+}
+
+
+async function saveQuizResult(finalScore){
+
+    const saveStatus =
+        document.getElementById("saveStatus");
+
+
+    const userData =
+        localStorage.getItem("gyamiUser");
+
+
+    if(!userData){
+
+        saveStatus.textContent =
+            "⚠️ Please log in before saving your quiz result.";
+
+        return;
+
+    }
+
+
+    try{
+
+        const user =
+            JSON.parse(userData);
+
+
+        if(!user.id){
+
+            saveStatus.textContent =
+                "⚠️ User account information is missing.";
+
+            return;
+
+        }
+
+
+        const payload = {
+
+            user_id:Number(user.id),
+
+            title:"Gyami Smart Quiz",
+
+            score:Number(finalScore),
+
+            total:Number(questions.length)
+
+        };
+
+
+        const response =
+            await fetch("/api/tests",{
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify(payload)
+
+            });
+
+
+        let data = {};
+
+        try{
+
+            data = await response.json();
+
+        }catch(error){
+
+            data = {};
+
+        }
+
+
+        if(response.ok){
+
+            saveStatus.textContent =
+                "✅ Result saved to Gyami database!";
+
+            console.log(
+                "Quiz result saved:",
+                data
+            );
+
+        }else{
+
+            console.error(
+                "Quiz save failed:",
+                response.status,
+                data
+            );
+
+            saveStatus.textContent =
+                "⚠️ Quiz completed, but result could not be saved.";
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "Quiz save error:",
+            error
+        );
+
+        saveStatus.textContent =
+            "⚠️ Quiz completed, but result could not be saved.";
+
+    }
+
+}
+
+
+loadQuestion();
+
+</script>
+
+</body>
+
+</html>

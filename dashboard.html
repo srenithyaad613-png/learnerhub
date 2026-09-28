@@ -1,0 +1,1168 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gyami | Dashboard</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(circle at top left,#24105c 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#0b4568 0%,transparent 35%),
+        #080b18;
+    color:#fff;
+    min-height:100vh;
+}
+
+nav{
+    width:100%;
+    padding:18px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:rgba(5,7,18,.85);
+    backdrop-filter:blur(15px);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#9b7cff;
+}
+
+.nav-links{
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+}
+
+.nav-links a{
+    color:#c9c8d8;
+    text-decoration:none;
+    font-size:14px;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+    color:#fff;
+}
+
+.container{
+    width:86%;
+    max-width:1250px;
+    margin:auto;
+}
+
+.hero{
+    padding:55px 0 35px;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:12px;
+}
+
+.hero h1 span{
+    color:#a78bfa;
+}
+
+.hero p{
+    color:#aaaabd;
+    font-size:17px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin:20px 0 40px;
+}
+
+.stat-card,
+.course-card,
+.action,
+.assignment-box{
+    background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 12px 35px rgba(0,0,0,.18);
+}
+
+.stat-card{
+    border-radius:20px;
+    padding:25px;
+}
+
+.stat-card .icon{
+    font-size:25px;
+    margin-bottom:12px;
+}
+
+.stat-card h3{
+    font-size:29px;
+    margin-bottom:6px;
+}
+
+.stat-card p{
+    color:#9999ad;
+    font-size:13px;
+}
+
+.section{
+    margin:42px 0;
+}
+
+.section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.section-header h2{
+    font-size:26px;
+}
+
+.section-header a{
+    color:#a78bfa;
+    text-decoration:none;
+}
+
+.courses{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.course-card{
+    border-radius:20px;
+    padding:24px;
+    transition:.2s;
+}
+
+.course-card:hover,
+.action:hover{
+    transform:translateY(-4px);
+    border-color:rgba(167,139,250,.45);
+}
+
+.course-icon{
+    width:50px;
+    height:50px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    background:rgba(139,92,246,.18);
+    font-size:24px;
+    margin-bottom:16px;
+}
+
+.course-card h3{
+    font-size:19px;
+    margin-bottom:7px;
+}
+
+.category{
+    color:#a78bfa;
+    font-size:13px;
+    margin-bottom:14px;
+}
+
+.course-card p{
+    color:#9999ad;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.progress-area{
+    margin-top:20px;
+}
+
+.progress-top{
+    display:flex;
+    justify-content:space-between;
+    color:#aaaabd;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.progress-bar{
+    height:7px;
+    background:rgba(255,255,255,.09);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,#7c3aed,#38bdf8);
+}
+
+.quick-actions{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:16px;
+}
+
+.action{
+    color:#fff;
+    text-decoration:none;
+    padding:23px;
+    border-radius:18px;
+    transition:.2s;
+}
+
+.action-icon{
+    font-size:27px;
+    margin-bottom:12px;
+}
+
+.action h3{
+    font-size:16px;
+    margin-bottom:6px;
+}
+
+.action p{
+    color:#9999ad;
+    font-size:12px;
+}
+
+.assignment-box{
+    border-radius:22px;
+    padding:25px;
+}
+
+.assignment-form{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr auto;
+    gap:12px;
+    margin-bottom:25px;
+}
+
+.assignment-form input{
+    width:100%;
+    padding:13px 15px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(0,0,0,.25);
+    color:#fff;
+    outline:none;
+}
+
+.assignment-form input:focus{
+    border-color:#8b5cf6;
+}
+
+.add-task{
+    border:0;
+    border-radius:12px;
+    padding:13px 18px;
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+}
+
+.assignment-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.assignment-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:17px;
+    border-radius:15px;
+    background:rgba(0,0,0,.2);
+    border:1px solid rgba(255,255,255,.06);
+}
+
+.assignment-info h4{
+    margin-bottom:5px;
+}
+
+.assignment-info p{
+    color:#9292a8;
+    font-size:12px;
+}
+
+.assignment-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.status{
+    font-size:12px;
+    padding:6px 10px;
+    border-radius:20px;
+    background:rgba(245,158,11,.12);
+    color:#fbbf24;
+}
+
+.status.completed{
+    background:rgba(34,197,94,.12);
+    color:#4ade80;
+}
+
+.complete-btn{
+    border:0;
+    border-radius:9px;
+    padding:9px 13px;
+    color:#fff;
+    background:#2563eb;
+    cursor:pointer;
+}
+
+.complete-btn.done{
+    background:#15803d;
+    cursor:default;
+}
+
+.recommendation{
+    padding:28px;
+    border-radius:22px;
+    background:linear-gradient(
+        135deg,
+        rgba(124,58,237,.25),
+        rgba(14,165,233,.12)
+    );
+    border:1px solid rgba(167,139,250,.2);
+}
+
+.recommendation h3{
+    font-size:21px;
+    margin-bottom:10px;
+}
+
+.recommendation p{
+    color:#bbbacc;
+    line-height:1.7;
+}
+
+.empty{
+    text-align:center;
+    color:#77778c;
+    padding:25px;
+}
+
+.message{
+    display:none;
+    padding:12px 15px;
+    margin-bottom:15px;
+    border-radius:12px;
+    background:rgba(34,197,94,.1);
+    color:#86efac;
+}
+
+.error-message{
+    background:rgba(239,68,68,.1);
+    color:#fca5a5;
+}
+
+footer{
+    text-align:center;
+    padding:45px 0;
+    color:#66667a;
+    font-size:12px;
+}
+
+@media(max-width:1200px){
+    .quick-actions{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:950px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .courses{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .quick-actions{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .assignment-form{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:650px){
+    nav{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .container{
+        width:92%;
+    }
+
+    .hero h1{
+        font-size:31px;
+    }
+
+    .stats,
+    .courses,
+    .quick-actions{
+        grid-template-columns:1fr;
+    }
+
+    .assignment-form{
+        grid-template-columns:1fr;
+    }
+
+    .assignment-item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        Gyami<span>✦</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="/dashboard.html" class="active">Dashboard</a>
+        <a href="/courses.html">Courses</a>
+        <a href="/books.html">Books</a>
+        <a href="/ai.html">AI</a>
+        <a href="/quiz.html">Quiz</a>
+        <a href="/progress.html">Progress</a>
+        <a href="/about.html">About</a>
+    </div>
+
+</nav>
+
+<main class="container">
+
+    <section class="hero">
+        <h1>Welcome back to <span>Gyami</span> ✨</h1>
+        <p>The Dreamers Dream. Keep learning, keep growing.</p>
+    </section>
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <div class="icon">📚</div>
+            <h3 id="courseCount">0</h3>
+            <p>Courses Available</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">📈</div>
+            <h3 id="overallProgress">0%</h3>
+            <p>Overall Progress</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">⏱️</div>
+            <h3 id="learningTime">0h 0m</h3>
+            <p>Learning Time</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">📝</div>
+            <h3 id="assignmentCount">0</h3>
+            <p>Assignments</p>
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="section-header">
+            <h2>Continue Learning 📖</h2>
+            <a href="/courses.html">View all →</a>
+        </div>
+
+        <div class="courses" id="courseContainer">
+            <div class="empty">Loading courses...</div>
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="section-header">
+            <h2>Quick Actions ⚡</h2>
+        </div>
+
+        <div class="quick-actions">
+
+            <a href="/quiz.html" class="action">
+                <div class="action-icon">🧠</div>
+                <h3>Take a Quiz</h3>
+                <p>Test your knowledge</p>
+            </a>
+
+            <a href="/books.html" class="action">
+                <div class="action-icon">📚</div>
+                <h3>Digital Library</h3>
+                <p>Explore learning resources</p>
+            </a>
+
+            <a href="/ai.html" class="action">
+                <div class="action-icon">🤖</div>
+                <h3>AI Assistant</h3>
+                <p>Get smart study help</p>
+            </a>
+
+            <a href="/progress.html" class="action">
+                <div class="action-icon">📊</div>
+                <h3>My Progress</h3>
+                <p>Track your learning</p>
+            </a>
+
+            <a href="/focus.html" class="action">
+                <div class="action-icon">🎯</div>
+                <h3>Focus Mode</h3>
+                <p>Start a focused study session</p>
+            </a>
+
+            <a href="/notes.html" class="action">
+                <div class="action-icon">📝</div>
+                <h3>My Notes</h3>
+                <p>Create and save study notes</p>
+            </a>
+
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="section-header">
+            <h2>Assignments & Tasks 📝</h2>
+        </div>
+
+        <div class="assignment-box">
+
+            <div id="assignmentMessage" class="message"></div>
+
+            <div class="assignment-form">
+
+                <input
+                    type="text"
+                    id="assignmentTitle"
+                    placeholder="Assignment title"
+                >
+
+                <input
+                    type="text"
+                    id="assignmentSubject"
+                    placeholder="Subject"
+                >
+
+                <input
+                    type="date"
+                    id="assignmentDueDate"
+                >
+
+                <button
+                    class="add-task"
+                    onclick="addAssignment()"
+                >
+                    + Add Task
+                </button>
+
+            </div>
+
+            <div id="assignmentList">
+                <div class="empty">Loading assignments...</div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="recommendation">
+
+            <h3>🌟 Your Learning Recommendation</h3>
+
+            <p>
+                Keep building your learning streak. Complete your pending
+                assignments, take quizzes regularly, use Focus Mode for
+                distraction-free study, create useful notes, and explore
+                courses that match your interests.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    Gyami • The Dreamers Dream ✨
+</footer>
+
+<script>
+
+let assignments = [];
+
+function getUser(){
+
+    try{
+        return JSON.parse(
+            localStorage.getItem("gyamiUser")
+        );
+    }
+    catch(error){
+        return null;
+    }
+
+}
+
+async function loadCourses(){
+
+    const container =
+        document.getElementById("courseContainer");
+
+    try{
+
+        const response =
+            await fetch("/api/courses");
+
+        if(!response.ok){
+            throw new Error("Courses could not be loaded.");
+        }
+
+        const data =
+            await response.json();
+
+        const courses =
+            data.courses || [];
+
+        document.getElementById("courseCount")
+            .textContent = courses.length;
+
+        if(courses.length === 0){
+
+            container.innerHTML =
+                '<div class="empty">No courses available.</div>';
+
+            return;
+        }
+
+        const icons = [
+            "🐍",
+            "📐",
+            "⚛️",
+            "🧪",
+            "🤖",
+            "🌐"
+        ];
+
+        container.innerHTML = "";
+
+        courses.slice(0,6).forEach((course,index)=>{
+
+            const progress =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        Number(course.progress || 0)
+                    )
+                );
+
+            const title =
+                course.title ||
+                course.name ||
+                "Course";
+
+            const category =
+                course.category ||
+                "Learning";
+
+            const description =
+                course.description ||
+                "Continue learning and improve your skills.";
+
+            container.innerHTML += `
+
+                <div class="course-card">
+
+                    <div class="course-icon">
+                        ${icons[index % icons.length]}
+                    </div>
+
+                    <h3>${escapeHtml(title)}</h3>
+
+                    <div class="category">
+                        ${escapeHtml(category)}
+                    </div>
+
+                    <p>
+                        ${escapeHtml(description)}
+                    </p>
+
+                    <div class="progress-area">
+
+                        <div class="progress-top">
+                            <span>Progress</span>
+                            <span>${progress}%</span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div
+                                class="progress-fill"
+                                style="width:${progress}%"
+                            ></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+        const totalProgress =
+            courses.reduce(
+                (sum,course)=>{
+                    return sum +
+                        Number(course.progress || 0);
+                },
+                0
+            );
+
+        const averageProgress =
+            Math.round(
+                totalProgress / courses.length
+            );
+
+        document.getElementById("overallProgress")
+            .textContent =
+            averageProgress + "%";
+
+    }
+    catch(error){
+
+        container.innerHTML =
+            '<div class="empty error-message">Unable to load courses.</div>';
+
+        console.error(error);
+
+    }
+
+}
+
+async function loadAssignments(){
+
+    const user = getUser();
+
+    const list =
+        document.getElementById("assignmentList");
+
+    if(!user || !user.id){
+
+        list.innerHTML =
+            '<div class="empty">Please log in to view assignments.</div>';
+
+        return;
+    }
+
+    try{
+
+        const response =
+            await fetch(
+                `/api/assignments/${user.id}`
+            );
+
+        if(!response.ok){
+            throw new Error("Assignments could not be loaded.");
+        }
+
+        const data =
+            await response.json();
+
+        assignments =
+            data.assignments || [];
+
+        renderAssignments();
+
+    }
+    catch(error){
+
+        list.innerHTML =
+            '<div class="empty error-message">Unable to load assignments.</div>';
+
+        console.error(error);
+
+    }
+
+}
+
+function renderAssignments(){
+
+    const list =
+        document.getElementById("assignmentList");
+
+    document.getElementById("assignmentCount")
+        .textContent =
+        assignments.length;
+
+    if(assignments.length === 0){
+
+        list.innerHTML =
+            '<div class="empty">No assignments yet. Add your first task above.</div>';
+
+        return;
+    }
+
+    list.innerHTML = "";
+
+    assignments.forEach(assignment=>{
+
+        const completed =
+            assignment.status === "Completed" ||
+            Number(assignment.completed || 0) === 1;
+
+        const title =
+            assignment.title || "Assignment";
+
+        const subject =
+            assignment.subject || "General";
+
+        const dueDate =
+            assignment.due_date || "No due date";
+
+        list.innerHTML += `
+
+            <div class="assignment-item">
+
+                <div class="assignment-info">
+
+                    <h4>
+                        ${escapeHtml(title)}
+                    </h4>
+
+                    <p>
+                        ${escapeHtml(subject)}
+                        • Due: ${escapeHtml(dueDate)}
+                    </p>
+
+                </div>
+
+                <div class="assignment-right">
+
+                    <span class="status ${completed ? "completed" : ""}">
+                        ${completed ? "Completed" : "Pending"}
+                    </span>
+
+                    ${
+                        completed
+
+                        ?
+
+                        `<button
+                            class="complete-btn done"
+                            disabled
+                        >
+                            ✓ Done
+                        </button>`
+
+                        :
+
+                        `<button
+                            class="complete-btn"
+                            onclick="completeAssignment(${assignment.id})"
+                        >
+                            Complete
+                        </button>`
+                    }
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+async function addAssignment(){
+
+    const user = getUser();
+
+    if(!user || !user.id){
+
+        showMessage(
+            "Please log in before adding an assignment.",
+            true
+        );
+
+        return;
+    }
+
+    const title =
+        document.getElementById("assignmentTitle")
+            .value.trim();
+
+    const subject =
+        document.getElementById("assignmentSubject")
+            .value.trim();
+
+    const dueDate =
+        document.getElementById("assignmentDueDate")
+            .value;
+
+    if(!title){
+
+        showMessage(
+            "Please enter an assignment title.",
+            true
+        );
+
+        return;
+    }
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/assignments",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+
+                    body:JSON.stringify({
+                        user_id:user.id,
+                        title:title,
+                        subject:subject || "General",
+                        due_date:dueDate || ""
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.detail ||
+                "Could not add assignment."
+            );
+
+        }
+
+        document.getElementById("assignmentTitle")
+            .value = "";
+
+        document.getElementById("assignmentSubject")
+            .value = "";
+
+        document.getElementById("assignmentDueDate")
+            .value = "";
+
+        showMessage(
+            "Assignment added successfully! 🎉"
+        );
+
+        await loadAssignments();
+
+    }
+    catch(error){
+
+        showMessage(
+            error.message ||
+            "Something went wrong.",
+            true
+        );
+
+    }
+
+}
+
+async function completeAssignment(id){
+
+    try{
+
+        const response =
+            await fetch(
+                `/api/assignments/${id}`,
+                {
+                    method:"PUT",
+
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+
+                    body:JSON.stringify({
+                        status:"Completed"
+                    })
+                }
+            );
+
+        if(!response.ok){
+
+            throw new Error(
+                "Could not complete assignment."
+            );
+
+        }
+
+        showMessage(
+            "Assignment completed! 🎉"
+        );
+
+        await loadAssignments();
+
+    }
+    catch(error){
+
+        showMessage(
+            "Unable to complete assignment.",
+            true
+        );
+
+    }
+
+}
+
+function showMessage(text,isError=false){
+
+    const message =
+        document.getElementById("assignmentMessage");
+
+    message.textContent = text;
+
+    message.className =
+        isError
+        ? "message error-message"
+        : "message";
+
+    message.style.display = "block";
+
+    setTimeout(()=>{
+        message.style.display = "none";
+    },3000);
+
+}
+
+async function loadLearningTime(){
+
+    const user = getUser();
+
+    if(!user || !user.id){
+        return;
+    }
+
+    try{
+
+        const response =
+            await fetch(
+                `/api/focus/${user.id}`
+            );
+
+        if(!response.ok){
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        const sessions =
+            data.focus ||
+            data.sessions ||
+            [];
+
+        let totalMinutes = 0;
+
+        sessions.forEach(session=>{
+
+            totalMinutes +=
+                Number(
+                    session.duration_minutes ||
+                    0
+                );
+
+        });
+
+        const hours =
+            Math.floor(
+                totalMinutes / 60
+            );
+
+        const minutes =
+            totalMinutes % 60;
+
+        document.getElementById("learningTime")
+            .textContent =
+            `${hours}h ${minutes}m`;
+
+    }
+    catch(error){
+
+        console.log(
+            "Learning time unavailable."
+        );
+
+    }
+
+}
+
+function escapeHtml(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+        loadCourses();
+        loadAssignments();
+        loadLearningTime();
+    }
+);
+
+</script>
+
+</body>
+</html>
+```

@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gyami | Courses</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    color: white;
+    background:
+        radial-gradient(circle at top left, #42206d, transparent 35%),
+        radial-gradient(circle at bottom right, #123e66, transparent 35%),
+        #080b16;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 6%;
+    background: rgba(10,12,25,0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(15px);
+}
+
+.brand {
+    font-size: 26px;
+    font-weight: bold;
+    color: #c28cff;
+}
+
+.brand span {
+    color: white;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav-links a:hover {
+    color: #c28cff;
+}
+
+main {
+    width: 88%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 45px 0;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.hero h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    color: #aaa;
+}
+
+.search {
+    margin: 25px auto;
+    max-width: 600px;
+}
+
+.search input {
+    width: 100%;
+    padding: 15px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.07);
+    color: white;
+    outline: none;
+    font-size: 15px;
+}
+
+.search input::placeholder {
+    color: #888;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filters button {
+    padding: 9px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: #ddd;
+    cursor: pointer;
+}
+
+.filters button.active,
+.filters button:hover {
+    background: rgba(180,120,255,0.25);
+    border-color: #b878ff;
+}
+
+.courses {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.course-card {
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.25s;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(194,140,255,0.5);
+}
+
+.icon {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.course-card h2 {
+    font-size: 21px;
+    margin-bottom: 8px;
+}
+
+.category {
+    color: #c28cff;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.progress-bg {
+    height: 9px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg,#8b4cff,#dc9cff);
+    transition: width 0.6s ease;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    color: #aaa;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.start {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    padding: 11px;
+    border-radius: 12px;
+    background: rgba(155,85,255,0.2);
+    color: white;
+    text-decoration: none;
+    border: 1px solid rgba(194,140,255,0.2);
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.start:hover {
+    background: rgba(155,85,255,0.35);
+}
+
+.message {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #aaa;
+    padding: 40px;
+}
+
+.recommendation {
+    margin-top: 35px;
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.recommendation h2 {
+    margin-bottom: 10px;
+}
+
+.recommendation p {
+    color: #aaa;
+    line-height: 1.6;
+}
+
+/* =========================
+   LEARNING MODAL
+========================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 550px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,27,75,0.98),
+            rgba(15,23,42,0.98)
+        );
+    border: 1px solid rgba(194,140,255,0.35);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+}
+
+.modal-box h2 {
+    margin-bottom: 10px;
+}
+
+.modal-subtitle {
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+.lesson-box {
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 20px;
+}
+
+.lesson-box h3 {
+    margin-bottom: 10px;
+}
+
+.lesson-box p {
+    color: #cbd5e1;
+    line-height: 1.6;
+}
+
+.modal-progress {
+    margin-bottom: 20px;
+}
+
+.modal-progress-text {
+    display: flex;
+    justify-content: space-between;
+    color: #aaa;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.modal-progress-bg {
+    height: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.modal-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg,#8b4cff,#dc9cff);
+    transition: width 0.6s ease;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 13px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+}
+
+.complete-btn {
+    background: #6366f1;
+}
+
+.complete-btn:hover {
+    background: #818cf8;
+}
+
+.close-btn {
+    background: rgba(255,255,255,0.08);
+}
+
+.close-btn:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.modal-message {
+    min-height: 22px;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+.success {
+    color: #86efac;
+}
+
+.error {
+    color: #fca5a5;
+}
+
+footer {
+    text-align: center;
+    color: #777;
+    padding: 35px;
+}
+
+@media(max-width:900px) {
+
+    .courses {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:600px) {
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .courses {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="brand">
+        Gyami<span> ✦</span>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="dashboard.html">Dashboard</a>
+        <a href="courses.html">Courses</a>
+        <a href="books.html">Books</a>
+        <a href="ai.html">AI Assistant</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="progress.html">Progress</a>
+        <a href="about.html">About</a>
+
+    </div>
+
+</nav>
+
+
+<main>
+
+<section class="hero">
+
+    <h1>
+        Explore Courses 🎓
+    </h1>
+
+    <p>
+        Choose what you want to learn today.
+    </p>
+
+    <div class="search">
+
+        <input
+            id="search"
+            type="text"
+            placeholder="🔍 Search courses..."
+        >
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="active"
+            onclick="showCategory('all', this)">
+            All
+        </button>
+
+        <button
+            onclick="showCategory('Programming', this)">
+            Programming
+        </button>
+
+        <button
+            onclick="showCategory('Science', this)">
+            Science
+        </button>
+
+        <button
+            onclick="showCategory('Mathematics', this)">
+            Mathematics
+        </button>
+
+        <button
+            onclick="showCategory('AI & Technology', this)">
+            AI & Technology
+        </button>
+
+    </div>
+
+</section>
+
+
+<section
+    class="courses"
+    id="courses">
+
+    <div class="message">
+        ⏳ Loading courses...
+    </div>
+
+</section>
+
+
+<section class="recommendation">
+
+    <h2>
+        🤖 Gyami Smart Recommendation
+    </h2>
+
+    <p>
+        Complete lessons regularly and Gyami will automatically
+        track your learning progress in the database.
+    </p>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    Gyami • The Dreamers Dream ✨
+
+</footer>
+
+
+<!-- =========================
+     LEARNING MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="learningModal">
+
+    <div class="modal-box">
+
+        <h2 id="modalTitle">
+            📚 Course
+        </h2>
+
+        <p
+            class="modal-subtitle"
+            id="modalCategory">
+            Course category
+        </p>
+
+
+        <div class="lesson-box">
+
+            <h3>
+                📖 Learning Activity
+            </h3>
+
+            <p id="lessonText">
+
+                Explore this course and complete a
+                learning activity to increase your progress.
+
+            </p>
+
+        </div>
+
+
+        <div class="modal-progress">
+
+            <div class="modal-progress-text">
+
+                <span>
+                    Current Progress
+                </span>
+
+                <span id="modalProgressText">
+                    0%
+                </span>
+
+            </div>
+
+
+            <div class="modal-progress-bg">
+
+                <div
+                    class="modal-progress-fill"
+                    id="modalProgressFill">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="modal-message"
+            id="modalMessage">
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="modal-btn complete-btn"
+                id="completeLessonButton"
+                onclick="completeLesson()">
+
+                ✅ Complete Lesson
+
+            </button>
+
+            <button
+                class="modal-btn close-btn"
+                onclick="closeLearning()">
+
+                Close
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let courses = [];
+
+let selectedCategory = "all";
+
+let selectedCourse = null;
+
+
+/* =====================================================
+   GET USER
+===================================================== */
+
+function getUser() {
+
+    const storedUser =
+        localStorage.getItem("gyamiUser");
+
+    if (!storedUser) {
+        return null;
+    }
+
+    try {
+
+        return JSON.parse(storedUser);
+
+    } catch (error) {
+
+        console.error(
+            "User data error:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD COURSES
+===================================================== */
+
+async function loadCourses() {
+
+    const container =
+        document.getElementById("courses");
+
+    try {
+
+        const response =
+            await fetch("/api/courses");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not load courses"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Courses received:",
+            data
+        );
+
+
+        if (Array.isArray(data)) {
+
+            courses = data;
+
+        } else {
+
+            courses =
+                data.courses || [];
+
+        }
+
+
+        displayCourses();
+
+
+    } catch (error) {
+
+        console.error(
+            "Course loading error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="message">
+
+                ⚠️ Could not load courses.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   DISPLAY COURSES
+===================================================== */
+
+function displayCourses() {
+
+    const container =
+        document.getElementById("courses");
+
+
+    const searchText =
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase();
+
+
+    const filteredCourses =
+        courses.filter(course => {
+
+            const name =
+                String(
+                    course.name ||
+                    course.title ||
+                    course.course_name ||
+                    ""
+                ).toLowerCase();
+
+
+            const category =
+                String(
+                    course.category ||
+                    course.type ||
+                    ""
+                ).toLowerCase();
+
+
+            const categoryMatch =
+                selectedCategory === "all" ||
+                category ===
+                selectedCategory.toLowerCase();
+
+
+            const searchMatch =
+                name.includes(searchText) ||
+                category.includes(searchText);
+
+
+            return (
+                categoryMatch &&
+                searchMatch
+            );
+
+        });
+
+
+    if (
+        filteredCourses.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="message">
+
+                🔎 No courses found.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    filteredCourses.forEach(course => {
+
+        const name =
+            course.name ||
+            course.title ||
+            course.course_name ||
+            "Course";
+
+
+        const category =
+            course.category ||
+            course.type ||
+            "Learning";
+
+
+        let progress =
+            Number(
+                course.progress || 0
+            );
+
+
+        progress =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    progress
+                )
+            );
+
+
+        let icon = "📚";
+
+
+        if (
+            category
+                .toLowerCase()
+                .includes("program")
+        ) {
+
+            icon = "💻";
+
+        }
+
+        else if (
+            category
+                .toLowerCase()
+                .includes("science")
+        ) {
+
+            icon = "🔬";
+
+        }
+
+        else if (
+            category
+                .toLowerCase()
+                .includes("math")
+        ) {
+
+            icon = "📐";
+
+        }
+
+        else if (
+            category
+                .toLowerCase()
+                .includes("ai")
+        ) {
+
+            icon = "🤖";
+
+        }
+
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "course-card";
+
+
+        card.innerHTML = `
+
+            <div class="icon">
+                ${icon}
+            </div>
+
+            <h2>
+                ${escapeHtml(name)}
+            </h2>
+
+            <div class="category">
+                ${escapeHtml(category)}
+            </div>
+
+            <div class="progress-bg">
+
+                <div
+                    class="progress"
+                    style="width:${progress}%">
+                </div>
+
+            </div>
+
+            <div class="progress-text">
+
+                <span>
+                    Your Progress
+                </span>
+
+                <span>
+                    ${progress}%
+                </span>
+
+            </div>
+
+            <button
+                class="start"
+                onclick="openLearning('${escapeAttribute(name)}','${escapeAttribute(category)}',${progress})">
+
+                ${
+                    progress >= 100
+                    ? "Review Course →"
+                    : "Start Learning →"
+                }
+
+            </button>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =====================================================
+   OPEN LEARNING
+===================================================== */
+
+function openLearning(
+    name,
+    category,
+    progress
+) {
+
+    selectedCourse = {
+        name: name,
+        category: category,
+        progress: Number(progress)
+    };
+
+
+    document.getElementById(
+        "modalTitle"
+    ).innerText =
+        "📚 " + name;
+
+
+    document.getElementById(
+        "modalCategory"
+    ).innerText =
+        category;
+
+
+    document.getElementById(
+        "modalProgressText"
+    ).innerText =
+        progress + "%";
+
+
+    document.getElementById(
+        "modalProgressFill"
+    ).style.width =
+        progress + "%";
+
+
+    document.getElementById(
+        "modalMessage"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "completeLessonButton"
+    ).disabled =
+        progress >= 100;
+
+
+    document.getElementById(
+        "completeLessonButton"
+    ).innerText =
+        progress >= 100
+        ? "🎉 Course Completed"
+        : "✅ Complete Lesson";
+
+
+    document.getElementById(
+        "learningModal"
+    ).classList.add("show");
+
+}
+
+
+/* =====================================================
+   COMPLETE LESSON
+===================================================== */
+
+async function completeLesson() {
+
+    const user =
+        getUser();
+
+
+    const message =
+        document.getElementById(
+            "modalMessage"
+        );
+
+
+    if (
+        !user ||
+        !user.id
+    ) {
+
+        message.className =
+            "modal-message error";
+
+
+        message.innerText =
+            "Please login first so Gyami can save your progress.";
+
+
+        return;
+
+    }
+
+
+    if (!selectedCourse) {
+        return;
+    }
+
+
+    const currentProgress =
+        Number(
+            selectedCourse.progress || 0
+        );
+
+
+    const newProgress =
+        Math.min(
+            100,
+            currentProgress + 20
+        );
+
+
+    try {
+
+        message.className =
+            "modal-message";
+
+
+        message.innerText =
+            "Saving your learning progress...";
+
+
+        const response =
+            await fetch(
+                "/api/progress",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        user_id:
+                            Number(user.id),
+
+                        subject:
+                            selectedCourse.name,
+
+                        progress:
+                            newProgress,
+
+                        study_minutes:
+                            30,
+
+                        lessons_completed:
+                            Math.ceil(
+                                newProgress / 20
+                            )
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "Could not save progress"
+            );
+
+        }
+
+
+        selectedCourse.progress =
+            newProgress;
+
+
+        document.getElementById(
+            "modalProgressText"
+        ).innerText =
+            newProgress + "%";
+
+
+        document.getElementById(
+            "modalProgressFill"
+        ).style.width =
+            newProgress + "%";
+
+
+        message.className =
+            "modal-message success";
+
+
+        message.innerText =
+            newProgress >= 100
+            ? "🎉 Course completed! Your progress is saved."
+            : "✅ Lesson completed! Your progress is saved.";
+
+
+        document.getElementById(
+            "completeLessonButton"
+        ).disabled =
+            newProgress >= 100;
+
+
+        document.getElementById(
+            "completeLessonButton"
+        ).innerText =
+            newProgress >= 100
+            ? "🎉 Course Completed"
+            : "✅ Complete Next Lesson";
+
+
+        /*
+           Update local course object
+        */
+
+        const matchingCourse =
+            courses.find(course => {
+
+                const courseName =
+                    course.name ||
+                    course.title ||
+                    course.course_name ||
+                    "";
+
+                return (
+                    String(courseName)
+                        .toLowerCase()
+                        .trim()
+                    ===
+                    selectedCourse.name
+                        .toLowerCase()
+                        .trim()
+                );
+
+            });
+
+
+        if (matchingCourse) {
+
+            matchingCourse.progress =
+                newProgress;
+
+        }
+
+
+        /*
+           Refresh the cards
+        */
+
+        displayCourses();
+
+
+    } catch (error) {
+
+        console.error(
+            "Progress save error:",
+            error
+        );
+
+
+        message.className =
+            "modal-message error";
+
+
+        message.innerText =
+            "⚠️ Could not save progress. Please try again.";
+
+    }
+
+}
+
+
+/* =====================================================
+   CLOSE LEARNING
+===================================================== */
+
+function closeLearning() {
+
+    document
+        .getElementById("learningModal")
+        .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   CATEGORY FILTER
+===================================================== */
+
+function showCategory(
+    category,
+    button
+) {
+
+    selectedCategory =
+        category;
+
+
+    document
+        .querySelectorAll(
+            ".filters button"
+        )
+        .forEach(btn => {
+
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    button.classList.add(
+        "active"
+    );
+
+
+    displayCourses();
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+document
+    .getElementById("search")
+    .addEventListener(
+        "input",
+        displayCourses
+    );
+
+
+/* =====================================================
+   HTML SAFETY
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function escapeAttribute(value) {
+
+    return String(value)
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        );
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadCourses();
+
+</script>
+
+</body>
+</html>

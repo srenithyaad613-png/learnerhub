@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gyami | About</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#080d1c;
+    color:white;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+
+nav{
+    padding:18px 7%;
+    background:#0f172a;
+    border-bottom:1px solid #26304a;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    color:#7dd3fc;
+}
+
+.nav-links{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+.nav-links a:hover,
+.nav-links .active{
+    color:#7dd3fc;
+}
+
+/* MAIN */
+
+.container{
+    width:86%;
+    max-width:1150px;
+    margin:45px auto;
+}
+
+/* HERO */
+
+.hero{
+    text-align:center;
+    padding:55px 25px;
+
+    background:
+    linear-gradient(135deg,#172554,#1e1b4b);
+
+    border:1px solid #3730a3;
+    border-radius:25px;
+
+    margin-bottom:30px;
+}
+
+.hero-icon{
+    font-size:65px;
+    margin-bottom:15px;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.hero h1 span{
+    color:#7dd3fc;
+}
+
+.hero p{
+    color:#cbd5e1;
+    max-width:750px;
+    margin:auto;
+    line-height:1.8;
+}
+
+/* SECTION */
+
+.section{
+    margin-bottom:30px;
+}
+
+.section-title{
+    font-size:28px;
+    margin-bottom:20px;
+}
+
+/* PROBLEM */
+
+.problem-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.card{
+    background:#111827;
+    border:1px solid #293653;
+    border-radius:18px;
+    padding:25px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:#38bdf8;
+}
+
+.icon{
+    font-size:35px;
+    margin-bottom:15px;
+}
+
+.card h3{
+    margin-bottom:10px;
+}
+
+.card p{
+    color:#94a3b8;
+    line-height:1.7;
+    font-size:14px;
+}
+
+/* SOLUTION */
+
+.solution{
+    background:#111827;
+    border:1px solid #293653;
+    border-radius:20px;
+    padding:30px;
+}
+
+.solution p{
+    color:#cbd5e1;
+    line-height:1.8;
+    margin-bottom:20px;
+}
+
+.steps{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.step{
+    text-align:center;
+    padding:20px;
+    background:#172033;
+    border-radius:14px;
+    border:1px solid #334155;
+}
+
+.step-number{
+    font-size:25px;
+    color:#7dd3fc;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+/* FEATURES */
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.feature{
+    padding:23px;
+    background:#111827;
+    border:1px solid #293653;
+    border-radius:17px;
+}
+
+.feature h3{
+    margin-bottom:9px;
+}
+
+.feature p{
+    color:#94a3b8;
+    line-height:1.7;
+    font-size:14px;
+}
+
+/* TECHNOLOGY */
+
+.tech{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.tech span{
+    padding:12px 17px;
+    background:#172033;
+    border:1px solid #334155;
+    border-radius:10px;
+    color:#cbd5e1;
+}
+
+/* FUTURE */
+
+.future{
+    padding:30px;
+    border-radius:20px;
+
+    background:
+    linear-gradient(135deg,#172554,#111827);
+
+    border:1px solid #334155;
+}
+
+.future ul{
+    list-style:none;
+}
+
+.future li{
+    padding:12px 0;
+    color:#cbd5e1;
+    border-bottom:1px solid #263247;
+}
+
+.future li:last-child{
+    border-bottom:none;
+}
+
+/* CTA */
+
+.cta{
+    text-align:center;
+    padding:35px;
+    margin-top:30px;
+
+    background:#111827;
+    border:1px solid #293653;
+    border-radius:20px;
+}
+
+.cta h2{
+    margin-bottom:10px;
+}
+
+.cta p{
+    color:#94a3b8;
+    margin-bottom:20px;
+}
+
+.btn{
+    display:inline-block;
+    padding:12px 20px;
+    border-radius:10px;
+    background:#6366f1;
+    color:white;
+    text-decoration:none;
+    margin:5px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:850px){
+
+    .problem-grid{
+        grid-template-columns:1fr;
+    }
+
+    .steps{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    .nav-links{
+        gap:8px;
+    }
+
+    .nav-links a{
+        font-size:11px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+
+    .steps{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav>
+
+<div class="logo">
+🌐 Gyami
+</div>
+
+<div class="nav-links">
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="courses.html">Courses</a>
+
+<a href="books.html">Books</a>
+
+<a href="ai.html">AI Assistant</a>
+
+<a href="quiz.html">Quiz</a>
+
+<a href="progress.html">Progress</a>
+
+<a href="about.html" class="active">About</a>
+
+</div>
+
+</nav>
+
+
+
+<main class="container">
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="hero-icon">
+🧠
+</div>
+
+<h1>
+Why <span>Gyami?</span>
+</h1>
+
+<p>
+Gyami is a Smart Education platform designed to make
+learning more personalized, interactive and accessible.
+It brings learning resources, AI assistance, quizzes and
+progress tracking together in one place.
+</p>
+
+</section>
+
+
+
+<!-- PROBLEM -->
+
+<section class="section">
+
+<h2 class="section-title">
+🎯 The Problem
+</h2>
+
+<div class="problem-grid">
+
+
+<div class="card">
+
+<div class="icon">
+📚
+</div>
+
+<h3>
+One-size-fits-all Learning
+</h3>
+
+<p>
+Students learn at different speeds, but traditional
+learning often provides the same content and pace for everyone.
+</p>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="icon">
+😕
+</div>
+
+<h3>
+Difficult Concepts
+</h3>
+
+<p>
+Students may struggle to understand difficult topics
+without immediate explanations or personalized support.
+</p>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="icon">
+📊
+</div>
+
+<h3>
+Limited Progress Awareness
+</h3>
+
+<p>
+Students may not always know which subjects need
+more attention or what they should study next.
+</p>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- SOLUTION -->
+
+<section class="section">
+
+<h2 class="section-title">
+💡 Our Solution
+</h2>
+
+<div class="solution">
+
+<p>
+Gyami creates a connected learning environment where
+students can learn, practice, receive guidance and monitor
+their progress.
+</p>
+
+
+<div class="steps">
+
+
+<div class="step">
+
+<div class="step-number">
+01
+</div>
+
+📚 Learn
+
+</div>
+
+
+<div class="step">
+
+<div class="step-number">
+02
+</div>
+
+🤖 Ask AI
+
+</div>
+
+
+<div class="step">
+
+<div class="step-number">
+03
+</div>
+
+🧠 Practice
+
+</div>
+
+
+<div class="step">
+
+<div class="step-number">
+04
+</div>
+
+📊 Improve
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- SMART FEATURES -->
+
+<section class="section">
+
+<h2 class="section-title">
+🚀 Smart Features
+</h2>
+
+
+<div class="features">
+
+
+<div class="feature">
+
+<h3>
+🤖 AI Learning Assistant
+</h3>
+
+<p>
+Provides simple explanations, study guidance and
+personalized learning suggestions.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<h3>
+📊 Progress Tracking
+</h3>
+
+<p>
+Students can monitor course completion, learning
+activity, streaks and achievements.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<h3>
+🧠 Interactive Quizzes
+</h3>
+
+<p>
+Students can test their understanding and receive
+instant performance feedback.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<h3>
+📚 Digital Learning Library
+</h3>
+
+<p>
+Educational resources can be organized by subject
+so students can find learning material easily.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<h3>
+🎯 Personalized Recommendations
+</h3>
+
+<p>
+The platform can analyze learning progress and
+suggest topics that need additional attention.
+</p>
+
+</div>
+
+
+<div class="feature">
+
+<h3>
+🌐 Unified Learning Platform
+</h3>
+
+<p>
+Courses, resources, AI support, quizzes and progress
+are available through one connected interface.
+</p>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- TECHNOLOGY -->
+
+<section class="section">
+
+<h2 class="section-title">
+💻 Technology
+</h2>
+
+<div class="tech">
+
+<span>🌐 HTML</span>
+
+<span>🎨 CSS</span>
+
+<span>⚡ JavaScript</span>
+
+<span>🐍 Python</span>
+
+<span>🚀 FastAPI</span>
+
+<span>🤖 AI Integration</span>
+
+</div>
+
+</section>
+
+
+
+<!-- FUTURE -->
+
+<section class="section">
+
+<h2 class="section-title">
+🔮 Future Scope
+</h2>
+
+<div class="future">
+
+<ul>
+
+<li>
+🤖 Real AI model integration for natural conversations
+</li>
+
+<li>
+🎯 Adaptive learning paths based on student performance
+</li>
+
+<li>
+📈 Advanced learning analytics and prediction
+</li>
+
+<li>
+🎤 Voice-based AI learning assistance
+</li>
+
+<li>
+👩‍🏫 Teacher dashboard for monitoring student progress
+</li>
+
+<li>
+📱 Mobile application for learning anywhere
+</li>
+
+</ul>
+
+</div>
+
+</section>
+
+
+
+<!-- CTA -->
+
+<section class="cta">
+
+<h2>
+🌟 Start Your Smart Learning Journey
+</h2>
+
+<p>
+Explore Gyami and experience connected,
+personalized education.
+</p>
+
+<a href="dashboard.html" class="btn">
+🏠 Open Dashboard
+</a>
+
+<a href="ai.html" class="btn">
+🤖 Try AI Assistant
+</a>
+
+</section>
+
+
+</main>
+
+
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gyami | Digital Library</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0b1020;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        nav {
+            width: 100%;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.96);
+            border-bottom: 1px solid #26304a;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #7dd3fc;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 23px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links .active {
+            color: #7dd3fc;
+        }
+
+        /* MAIN */
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 45px auto;
+        }
+
+        .heading {
+            margin-bottom: 30px;
+        }
+
+        .heading h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .heading p {
+            color: #94a3b8;
+            font-size: 16px;
+        }
+
+        /* SEARCH */
+        .search-box {
+            margin-bottom: 35px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 13px;
+            border: 1px solid #334155;
+            background: #111827;
+            color: white;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .search-box input:focus {
+            border-color: #38bdf8;
+        }
+
+        /* CATEGORY */
+        .categories {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
+        }
+
+        .category {
+            padding: 10px 18px;
+            border-radius: 20px;
+            background: #172033;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .category:hover,
+        .category.active {
+            background: #1e3a5f;
+            border-color: #38bdf8;
+            color: #7dd3fc;
+        }
+
+        /* BOOK GRID */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .book-card {
+            background: linear-gradient(145deg, #111827, #172033);
+            border: 1px solid #293653;
+            border-radius: 18px;
+            padding: 24px;
+            transition: 0.3s;
+        }
+
+        .book-card:hover {
+            transform: translateY(-6px);
+            border-color: #38bdf8;
+        }
+
+        .book-cover {
+            height: 145px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #172554, #312e81);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 58px;
+            margin-bottom: 20px;
+        }
+
+        .book-card h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .author {
+            color: #7dd3fc;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tag {
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: #1e293b;
+            color: #cbd5e1;
+            font-size: 12px;
+        }
+
+        .read-btn {
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 9px 15px;
+            border-radius: 9px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .read-btn:hover {
+            background: #3b82f6;
+        }
+
+        /* FEATURED */
+        .featured {
+            margin-top: 35px;
+            margin-bottom: 35px;
+            padding: 28px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #172554, #1e1b4b);
+            border: 1px solid #4338ca;
+        }
+
+        .featured h2 {
+            margin-bottom: 10px;
+        }
+
+        .featured p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 18px;
+        }
+
+        .featured-btn {
+            display: inline-block;
+            text-decoration: none;
+            background: #6366f1;
+            color: white;
+            padding: 11px 19px;
+            border-radius: 10px;
+        }
+
+        /* NO RESULTS */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 50px;
+            color: #94a3b8;
+            font-size: 17px;
+            grid-column: 1 / -1;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .book-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .nav-links {
+                gap: 9px;
+            }
+
+            .nav-links a {
+                font-size: 11px;
+            }
+
+            .book-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .heading h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+
+        <div class="logo">
+            🌐 Gyami
+        </div>
+
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="courses.html">Courses</a>
+            <a href="books.html" class="active">Books</a>
+            <a href="ai.html">AI Assistant</a>
+            <a href="quiz.html">Quiz</a>
+            <a href="progress.html">Progress</a>
+        </div>
+
+    </nav>
+
+
+    <main class="container">
+
+        <!-- HEADING -->
+        <div class="heading">
+
+            <h1>📚 Digital Library</h1>
+
+            <p>
+                Explore educational books, study resources and knowledge materials.
+            </p>
+
+        </div>
+
+
+        <!-- SEARCH -->
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔍 Search books, subjects or authors..."
+            >
+
+        </div>
+
+
+        <!-- CATEGORIES -->
+        <div class="categories">
+
+            <div class="category active" onclick="filterBooks('all', this)">
+                All
+            </div>
+
+            <div class="category" onclick="filterBooks('programming', this)">
+                💻 Programming
+            </div>
+
+            <div class="category" onclick="filterBooks('science', this)">
+                🔬 Science
+            </div>
+
+            <div class="category" onclick="filterBooks('mathematics', this)">
+                📐 Mathematics
+            </div>
+
+            <div class="category" onclick="filterBooks('ai', this)">
+                🤖 AI & Technology
+            </div>
+
+        </div>
+
+
+        <!-- FEATURED -->
+        <section class="featured">
+
+            <h2>⭐ Recommended Resource</h2>
+
+            <p>
+                Start with a beginner-friendly programming resource to strengthen
+                your fundamentals before moving to advanced topics.
+            </p>
+
+            <a href="courses.html" class="featured-btn">
+                Continue Learning →
+            </a>
+
+        </section>
+
+
+        <!-- BOOK GRID -->
+        <section class="book-grid" id="bookGrid">
+
+
+            <!-- BOOK 1 -->
+            <div class="book-card" data-category="programming">
+
+                <div class="book-cover">
+                    🐍
+                </div>
+
+                <h2>Python Programming</h2>
+
+                <div class="author">
+                    📖 Programming Fundamentals
+                </div>
+
+                <p class="description">
+                    Learn Python basics, variables, conditions, loops,
+                    functions and problem solving.
+                </p>
+
+                <div class="book-footer">
+
+                    <span class="tag">
+                        Programming
+                    </span>
+
+                    <button class="read-btn" onclick="readBook('Python Programming')">
+                        Read
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOOK 2 -->
+            <div class="book-card" data-category="mathematics">
+
+                <div class="book-cover">
+                    📐
+                </div>
+
+                <h2>Mathematics Essentials</h2>
+
+                <div class="author">
+                    📖 Mathematics
+                </div>
+
+                <p class="description">
+                    Explore important mathematical concepts,
+                    formulas and problem-solving techniques.
+                </p>
+
+                <div class="book-footer">
+
+                    <span class="tag">
+                        Mathematics
+                    </span>
+
+                    <button class="read-btn" onclick="readBook('Mathematics Essentials')">
+                        Read
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOOK 3 -->
+            <div class="book-card" data-category="science">
+
+                <div class="book-cover">
+                    ⚛️
+                </div>
+
+                <h2>Physics Fundamentals</h2>
+
+                <div class="author">
+                    📖 Physics
+                </div>
+
+                <p class="description">
+                    Understand motion, forces, energy and the basic
+                    principles behind the physical world.
+                </p>
+
+                <div class="book-footer">
+
+                    <span class="tag">
+                        Science
+                    </span>
+
+                    <button class="read-btn" onclick="readBook('Physics Fundamentals')">
+                        Read
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOOK 4 -->
+            <div class="book-card" data-category="science">
+
+                <div class="book-cover">
+                    🧪
+                </div>
+
+                <h2>Chemistry Basics</h2>
+
+                <div class="author">
+                    📖 Chemistry
+                </div>
+
+                <p class="description">
+                    Learn atoms, molecules, chemical reactions and
+                    essential chemistry concepts.
+                </p>
+
+                <div class="book-footer">
+
+                    <span class="tag">
+                        Science
+                    </span>
+
+                    <button class="read-btn" onclick="readBook('Chemistry Basics')">
+                        Read
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOOK 5 -->
+            <div class="book-card" data-category="ai">
+
+                <div class="book-cover">
+                    🤖
+                </div>
+
+                <h2>Introduction to AI</h2>
+
+                <div class="author">
+                    📖 Artificial Intelligence
+                </div>
+
+                <p class="description">
+                    Discover machine learning, intelligent systems,
+                    data and real-world AI applications.
+                </p>
+
+                <div class="book-footer">
+
+                    <span class="tag">
+                        AI & Technology
+                    </span>
+
+                    <button class="read-btn" onclick="readBook('Introduction to AI')">
+                        Read
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOOK 6 -->
+            <div class="book-card" data-category="programming">
+
+                <div class="book-cover">
+                    🌐
+                </div>
+
+                <h2>Web Development</h2>
+
+                <div class="author">
+                    📖 HTML, CSS & JavaScript
+                </div>
+
+                <p class="description">
+                    Build websites using HTML, CSS and JavaScript
+                    while learning modern web development concepts.
+                </p>
+
+                <div class="book-footer">
+
+                    <span class="tag">
+                        Programming
+                    </span>
+
+                    <button class="read-btn" onclick="readBook('Web Development')">
+                        Read
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="no-results" id="noResults">
+                📚 No books found. Try another search.
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        let currentCategory = "all";
+
+
+        /* FILTER BOOKS */
+
+        function filterBooks(category, element) {
+
+            currentCategory = category;
+
+            document.querySelectorAll(".category").forEach(function(btn) {
+                btn.classList.remove("active");
+            });
+
+            element.classList.add("active");
+
+            applyFilters();
+        }
+
+
+        /* SEARCH + FILTER */
+
+        document.getElementById("searchInput").addEventListener("input", function() {
+            applyFilters();
+        });
+
+
+        function applyFilters() {
+
+            const search =
+                document.getElementById("searchInput").value.toLowerCase();
+
+            const books =
+                document.querySelectorAll(".book-card");
+
+            let visibleBooks = 0;
+
+
+            books.forEach(function(book) {
+
+                const text = book.innerText.toLowerCase();
+
+                const category =
+                    book.getAttribute("data-category");
+
+
+                const matchesSearch =
+                    text.includes(search);
+
+                const matchesCategory =
+                    currentCategory === "all" ||
+                    category === currentCategory;
+
+
+                if (matchesSearch && matchesCategory) {
+
+                    book.style.display = "block";
+                    visibleBooks++;
+
+                } else {
+
+                    book.style.display = "none";
+
+                }
+
+            });
+
+
+            document.getElementById("noResults").style.display =
+                visibleBooks === 0 ? "block" : "none";
+        }
+
+
+        /* READ BUTTON */
+
+        function readBook(bookName) {
+
+            alert(
+                "📖 " + bookName +
+                "\\n\\nThis digital resource is ready for your learning journey! 🚀"
+            );
+
+        }
+
+    </script>
+
+</body>
+</html>

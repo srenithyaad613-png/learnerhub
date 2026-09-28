@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gyami | The Dreamers Dream</title>
+
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #090b20, #17104a, #30145f);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            min-height: 650px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+        }
+
+        .left {
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(
+                145deg,
+                rgba(40, 30, 100, 0.75),
+                rgba(20, 15, 60, 0.65)
+            );
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 25px;
+        }
+
+        .brand {
+            font-size: 48px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 19px;
+            color: #d8d4ff;
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+        }
+
+        .description {
+            color: #c7c4dd;
+            line-height: 1.7;
+            font-size: 16px;
+            max-width: 450px;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .feature {
+            padding: 10px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #eeeaff;
+            font-size: 14px;
+        }
+
+        .right {
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(5, 5, 25, 0.35);
+        }
+
+        .right h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #aaa7c5;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ddd9f5;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 17px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.07);
+            color: white;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #8d7aff;
+            box-shadow: 0 0 15px rgba(141, 122, 255, 0.2);
+        }
+
+        input::placeholder {
+            color: #88859d;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #6c5ce7, #9b59ff);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(125, 90, 255, 0.35);
+        }
+
+        .demo-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .demo-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .signup {
+            text-align: center;
+            margin-top: 25px;
+            color: #aaa7c5;
+            font-size: 14px;
+        }
+
+        .signup span {
+            color: #a993ff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .signup span:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(255, 80, 100, 0.12);
+            color: #ffb5bf;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .left,
+            .right {
+                padding: 40px 30px;
+            }
+
+            .brand {
+                font-size: 38px;
+            }
+
+            .logo {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- LEFT SIDE -->
+
+        <div class="left">
+
+            <img src="logo.png" alt="Gyami Logo" class="logo">
+
+            <div class="brand">Gyami</div>
+
+            <div class="tagline">
+                The Dreamers Dream ✨
+            </div>
+
+            <p class="description">
+                A smart learning platform designed to make education
+                more interactive, personalized and enjoyable.
+                Learn concepts, practice with quizzes, track your progress
+                and get help from AI, all in one place.
+            </p>
+
+            <div class="features">
+                <div class="feature">🤖 AI Learning</div>
+                <div class="feature">📊 Smart Progress</div>
+                <div class="feature">🧠 Interactive Quizzes</div>
+                <div class="feature">📚 Digital Library</div>
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="right">
+
+            <h2>Welcome Back 👋</h2>
+
+            <p class="subtitle">
+                Continue your learning journey with Gyami.
+            </p>
+
+            <form id="loginForm">
+
+                <div class="input-group">
+                    <label>Email</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Sign In 🚀
+                </button>
+
+            </form>
+
+
+            <button class="demo-btn" onclick="demoLogin()">
+                Continue as Demo Student
+            </button>
+
+
+            <div class="message" id="message"></div>
+
+
+            <div class="signup">
+
+                Don't have an account?
+
+                <span onclick="createAccount()">
+                    Create one
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const loginForm = document.getElementById("loginForm");
+        const message = document.getElementById("message");
+
+
+        // =====================================================
+        // LOGIN
+        // =====================================================
+
+        loginForm.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value.trim();
+
+
+            if (email === "" || password === "") {
+
+                showMessage(
+                    "Please enter your email and password.",
+                    false
+                );
+
+                return;
+            }
+
+
+            try {
+
+                const response = await fetch("/api/login", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+
+                });
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    showMessage(
+                        data.detail || "Invalid email or password.",
+                        false
+                    );
+
+                    return;
+                }
+
+
+                // Save logged-in user
+                localStorage.setItem(
+                    "gyamiUser",
+                    JSON.stringify(data.user)
+                );
+
+
+                showMessage(
+                    "Login successful! Opening Gyami 🚀",
+                    true
+                );
+
+
+                setTimeout(function() {
+
+                    window.location.href =
+                        "/dashboard.html";
+
+                }, 700);
+
+
+            } catch (error) {
+
+                showMessage(
+                    "Could not connect to Gyami backend.",
+                    false
+                );
+
+            }
+
+        });
+
+
+        // =====================================================
+        // DEMO LOGIN
+        // =====================================================
+
+        function demoLogin() {
+
+            const demoUser = {
+
+                id: 0,
+
+                name: "Demo Student",
+
+                email: "demo@gyami.com"
+
+            };
+
+
+            localStorage.setItem(
+                "gyamiUser",
+                JSON.stringify(demoUser)
+            );
+
+
+            window.location.href =
+                "/dashboard.html";
+
+        }
+
+
+        // =====================================================
+        // CREATE ACCOUNT
+        // =====================================================
+
+        function createAccount() {
+
+            window.location.href =
+                "/signup.html";
+
+        }
+
+
+        // =====================================================
+        // MESSAGE
+        // =====================================================
+
+        function showMessage(text, success) {
+
+            message.style.display = "block";
+
+            message.textContent = text;
+
+
+            if (success) {
+
+                message.style.background =
+                    "rgba(70, 220, 150, 0.12)";
+
+                message.style.color =
+                    "#9ff0c7";
+
+            } else {
+
+                message.style.background =
+                    "rgba(255, 80, 100, 0.12)";
+
+                message.style.color =
+                    "#ffb5bf";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>
